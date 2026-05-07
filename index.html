@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Hỗ Trợ Học Tập - Hệ thống tính điểm thông minh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="dark-mode-toggle" id="darkModeToggle">
+    <i class="fas fa-moon"></i>
+    <i class="fas fa-sun" style="display: none;"></i>
+</button>
+
+<div class="mobile-header">
+    <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
+    <div class="mobile-logo">Hỗ Trợ Học Tập</div>
+    <div class="mobile-placeholder"></div>
+</div>
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="close-sidebar" id="closeSidebar">✕</div>
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="logo-text">
+                <h1>Hỗ Trợ Học Tập</h1>
+                <p class="logo-sub">Hệ thống tính điểm thông minh</p>
+            </div>
+        </div>
+        
+        <div class="nav-group">
+            <div class="nav-group-title">TRANG CHỦ</div>
+            <nav class="nav-menu">
+                <a class="nav-item active" data-tab="tab-home"><span class="nav-icon"><i class="fas fa-home"></i></span><span>Trang chủ</span></a>
+            </nav>
+        </div>
+        <div class="nav-group">
+            <div class="nav-group-title">TÍNH ĐIỂM</div>
+            <nav class="nav-menu">
+                <a class="nav-item" data-tab="tab-hocphan"><span class="nav-icon"><i class="fas fa-chart-simple"></i></span><span>Tính điểm học phần</span></a>
+                <a class="nav-item" data-tab="tab-quamon"><span class="nav-icon"><i class="fas fa-pen-fancy"></i></span><span>Tính điểm qua môn</span></a>
+                <a class="nav-item" data-tab="tab-totnghiep"><span class="nav-icon"><i class="fas fa-graduation-cap"></i></span><span>Tính điểm tốt nghiệp</span></a>
+            </nav>
+        </div>
+        <div class="nav-group">
+            <div class="nav-group-title">CÔNG CỤ</div>
+            <nav class="nav-menu">
+                <a class="nav-item" data-tab="tab-quydoi"><span class="nav-icon"><i class="fas fa-arrows-rotate"></i></span><span>Quy đổi chứng chỉ</span></a>
+                <a class="nav-item" data-tab="tab-ontap"><span class="nav-icon"><i class="fas fa-book-open"></i></span><span>Nội dung ôn tập</span></a>
+                <a class="nav-item" data-tab="tab-hocbong"><span class="nav-icon"><i class="fas fa-money-bill-wave"></i></span><span>Điều kiện học bổng</span></a>
+                <a class="nav-item" data-tab="tab-dudoan"><span class="nav-icon"><i class="fas fa-chart-line"></i></span><span>Tính điểm xét tuyển</span></a>
+                <a class="nav-item" data-tab="tab-daihoc"><span class="nav-icon"><i class="fas fa-university"></i></span><span>Tham khảo Đại học</span></a>
+            </nav>
+        </div>
+        <div class="nav-group">
+            <div class="nav-group-title">HỖ TRỢ</div>
+            <nav class="nav-menu">
+                <a class="nav-item" data-tab="tab-huongdan"><span class="nav-icon"><i class="fas fa-question-circle"></i></span><span>Hướng dẫn sử dụng</span></a>
+                <a class="nav-item" data-tab="tab-gopy"><span class="nav-icon"><i class="fas fa-comment-dots"></i></span><span>Góp ý & báo lỗi</span></a>
+                <a class="nav-item" data-tab="tab-vechungtoi"><span class="nav-icon"><i class="fas fa-building"></i></span><span>Về chúng tôi</span></a>
+                <a class="nav-item" data-tab="tab-ungho"><span class="nav-icon"><i class="fas fa-heart"></i></span><span>Ủng hộ</span></a>
+            </nav>
+        </div>
+        <div class="sidebar-footer">
+            <div class="footer-copyright">© 2026 Hỗ Trợ Học Tập. All rights reserved.</div>
+            <button class="btn-donate-sidebar" onclick="alert('💖 Cảm ơn bạn đã ủng hộ!')"><i class="fas fa-heart"></i> Đóng góp</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <!-- TAB HOME -->
+        <div id="tab-home" class="tab-content active">
+            <div class="hero-section">
+                <h1 class="hero-title">Hỗ Trợ Học Tập</h1>
+                <p class="hero-subtitle">Giải pháp học tập toàn diện</p>
+                <p class="hero-desc">Nền tảng tích hợp giúp bạn tính điểm GPA, quy đổi chứng chỉ ngoại ngữ và kết nối cộng đồng sinh viên năng động.</p>
+                <div class="hero-stats">
+                    <div class="stat-item"><div class="stat-number">50.000+</div><div class="stat-label">SINH VIÊN</div></div>
+                    <div class="stat-item"><div class="stat-number">5+</div><div class="stat-label">CÔNG CỤ</div></div>
+                    <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">HỖ TRỢ</div></div>
+                </div>
+            </div>
+            
+            <div class="features-section">
+                <h2 class="section-title-center">Tính năng nổi bật</h2>
+                <div class="features-grid">
+                    <div class="feature-card" data-tab-link="tab-hocphan"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><h3>Tính điểm học phần</h3><p>Nhập điểm thành phần, tính tổng kết và xếp loại</p></div>
+                    <div class="feature-card" data-tab-link="tab-quamon"><div class="feature-icon"><i class="fas fa-pen-fancy"></i></div><h3>Tính điểm qua môn</h3><p>Dự đoán điểm cần đạt để qua môn</p></div>
+                    <div class="feature-card" data-tab-link="tab-quydoi"><div class="feature-icon"><i class="fas fa-exchange-alt"></i></div><h3>Quy đổi chứng chỉ</h3><p>TOEIC, IELTS sang thang điểm</p></div>
+                    <div class="feature-card" data-tab-link="tab-dudoan"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><h3>Dự đoán đỗ Đại học</h3><p>Check cơ hội đỗ các trường top</p></div>
+                </div>
+            </div>
+
+            <div class="team-section">
+                <h2 class="section-title-center">Đội ngũ phát triển</h2>
+                <div class="team-grid">
+                    <div class="team-card"><img src="https://scontent.fhan15-1.fna.fbcdn.net/v/t39.30808-1/651175714_907260288891613_7156699205291040253_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=102&ccb=1-7&_nc_sid=e99d92&_nc_ohc=cDFGYHRo7zMQ7kNvwFWe05y&_nc_oc=AdoKJVDtwB7TUMMZxAQOSkPeuN4TIeoB0mQxudZhAWpXb3w4FaXOjX_Zp3VVHfDMgrIcojG8fZqZGlQ_qDa5zwjU&_nc_zt=24&_nc_ht=scontent.fhan15-1.fna&_nc_gid=YRfQVCq3AUZjl-p7z-kW3Q&_nc_ss=7b2a8&oh=00_Af7ePcZ5vEPfOSiX1-lakQ_IbRtu5iEgorM0egfWOSjyFQ&oe=69FCE186" class="team-avatar-img"><h3>Nguyễn Trung Kiên</h3><p class="team-role">Product & Content Ideation</p></div>
+                    <div class="team-card"><img src="https://cdn.phototourl.com/free/2026-05-07-7763f5a0-f305-4ffc-bb71-c54b46a87729.jpg" class="team-avatar-img"><h3>Trịnh Văn Tú</h3><p class="team-role">Founder & Full-stack Developer</p></div>
+                    <div class="team-card"><img src="https://cdn.phototourl.com/free/2026-05-07-f47d9032-4646-4d29-932b-0c3a649940a7.jpg" class="team-avatar-img"><h3>Bùi Thị Trà My</h3><p class="team-role">Marketing & Đồng Sáng Lập</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB TÍNH ĐIỂM HỌC PHẦN -->
+        <div id="tab-hocphan" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-chart-simple"></i> Tính điểm học phần</h2>
+                <div class="form-row"><div class="form-group"><label class="form-label">Chọn thang điểm</label><select class="form-select" id="hocphanGradeScale"><option value="9">Thang điểm 9 cấp</option><option value="5">Thang điểm 5 cấp</option><option value="3">Thang điểm 3 cấp</option></select></div></div>
+                <table class="score-table"><thead><tr><th>Loại điểm</th><th>Trọng số</th><th>Điểm (0-10)</th><th>Đóng góp</th></tr></thead><tbody id="hocphanTableBody"><tr><td>Điểm 1</td><td class="weight-cell-hp">5%</td><td><input type="number" step="0.1" min="0" max="10" class="score-input-hp" data-index="0"></td><td class="contribution-cell-hp">-</td></tr><tr><td>Điểm 2</td><td class="weight-cell-hp">5%</td><td><input type="number" step="0.1" min="0" max="10" class="score-input-hp" data-index="1"></td><td class="contribution-cell-hp">-</td></tr><tr><td>Điểm 3</td><td class="weight-cell-hp">30%</td><td><input type="number" step="0.1" min="0" max="10" class="score-input-hp" data-index="2"></td><td class="contribution-cell-hp">-</td></tr><tr><td>Điểm 4</td><td class="weight-cell-hp">60%</td><td><input type="number" step="0.1" min="0" max="10" class="score-input-hp" data-index="3"></td><td class="contribution-cell-hp">-</td></tr></tbody></table>
+                <button class="btn-reset" id="resetHocPhanBtn"><i class="fas fa-undo-alt"></i> Đặt lại</button>
+                <div class="result-container"><div class="result-card"><div class="result-label">Điểm tổng kết</div><div class="result-value" id="hocphanFinalScore">--</div></div><div class="result-card"><div class="result-label">Xếp loại</div><div class="result-value" id="hocphanGradeLetter">--</div></div><div class="result-card"><div class="result-label">Thang điểm 4</div><div class="result-value" id="hocphanGrade4">--</div></div></div>
+                <div class="warning-message" id="hpWarningMsg"></div>
+                <div class="reference-table"><h4>Thang đang dùng</h4><table class="grade-reference"><thead><tr><th>Khoảng</th><th>Chữ</th><th>Thang 4</th></tr></thead><tbody id="hocphanGradeTableBody"></tbody></table></div>
+            </div>
+        </div>
+
+        <!-- TAB TÍNH ĐIỂM QUA MÔN -->
+        <div id="tab-quamon" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-pen-fancy"></i> Tính điểm qua môn</h2>
+                <div class="form-row"><div class="form-group"><label class="form-label">Chọn cấu trúc trọng số</label><select class="form-select" id="weightStructure"><option value="5,5,30,60">5 - 5 - 30 - 60</option><option value="10,10,30,50">10 - 10 - 30 - 50</option><option value="15,15,30,40">15 - 15 - 30 - 40</option><option value="20,20,20,40">20 - 20 - 20 - 40</option></select></div></div>
+                <table class="score-table"><thead><tr><th>Loại điểm</th><th>Trọng số</th><th>Điểm (0-10)</th><th>Đóng góp</th></tr></thead><tbody><tr><td>Điểm 1</td><td class="weight-cell">5%</td><td><input type="number" step="0.1" min="0" max="10" class="score-input" data-index="0"></td><td class="contribution-cell">-</td></tr><tr><td>Điểm 2</td><td class="weight-cell">5%</td><td><input type="number" step="0.1" min="0" max="10" class="score-input" data-index="1"></td><td class="contribution-cell">-</td></tr><tr><td>Điểm 3</td><td class="weight-cell">30%</td><td><input type="number" step="0.1" min="0" max="10" class="score-input" data-index="2"></td><td class="contribution-cell">-</td></tr><tr><td>Điểm cuối kỳ</td><td class="weight-cell">60%</td><td><input type="number" step="0.1" min="0" max="10" class="score-input" data-index="3"></td><td class="contribution-cell">-</td></tr></tbody></table>
+                <button class="btn-reset" id="resetBtn"><i class="fas fa-undo-alt"></i> Đặt lại</button>
+                <div class="result-container"><div class="result-card"><div class="result-label">Điểm tổng kết</div><div class="result-value" id="finalScore">--</div></div><div class="result-card"><div class="result-label">Xếp loại</div><div class="result-value" id="gradeLetter">--</div></div><div class="result-card"><div class="result-label">Thang điểm 4</div><div class="result-value" id="grade4">--</div></div></div>
+                <div class="reference-table"><h4>Thang điểm tham khảo</h4><table class="grade-reference"><thead><tr><th>Khoảng</th><th>Chữ</th><th>Thang 4</th></tr></thead><tbody id="gradeTableBody"></tbody></table></div>
+                <div class="ad-section"><p><i class="fas fa-code"></i> Được phát triển bởi F9 Exploit Team</p></div>
+            </div>
+        </div>
+
+        <!-- TAB TÍNH ĐIỂM TỐT NGHIỆP -->
+        <div id="tab-totnghiep" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Tính điểm tốt nghiệp</h2>
+                <div class="info-box"><i class="fas fa-info-circle"></i> Hệ thống xét tốt nghiệp theo tín chỉ tích lũy</div>
+                <div class="form-row"><div class="form-group"><label>Số tín chỉ đã tích lũy</label><input type="number" id="accumulatedCredits" class="form-input" placeholder="VD: 120"></div><div class="form-group"><label>Điểm TB tích lũy</label><input type="number" step="0.01" id="accumulatedGPA" class="form-input" placeholder="VD: 3.2"></div><div class="form-group"><label>Số tín chỉ còn lại</label><input type="number" id="remainingCredits" class="form-input" placeholder="VD: 30"></div><div class="form-group"><label>Điểm dự kiến các môn còn lại</label><input type="number" step="0.1" id="expectedScore" class="form-input" placeholder="0-10"></div></div>
+                <button class="btn-calculate" id="calcGraduationBtn"><i class="fas fa-calculator"></i> Tính điểm tốt nghiệp</button>
+                <div class="graduation-result"><div class="result-row">Điểm tốt nghiệp dự kiến: <strong id="graduationScore">--</strong></div><div class="result-row">Xếp loại tốt nghiệp: <strong id="graduationRank">--</strong></div></div>
+            </div>
+        </div>
+
+        <!-- TAB QUY ĐỔI CHỨNG CHỈ -->
+        <div id="tab-quydoi" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-exchange-alt"></i> Quy đổi chứng chỉ</h2>
+                <div class="form-row"><div class="form-group"><label>Từ loại chứng chỉ</label><select id="fromCert" class="form-select"><option value="toeic">TOEIC</option><option value="ielts">IELTS</option></select></div><div class="form-group"><label>Điểm số</label><input type="number" id="certScore" class="form-input" placeholder="Nhập điểm"></div></div>
+                <button class="btn-convert" id="convertBtn"><i class="fas fa-sync-alt"></i> Quy đổi</button>
+                <div class="convert-result" id="convertResult" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+
+        <!-- TAB NỘI DUNG ÔN TẬP -->
+        <div id="tab-ontap" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-book-open"></i> Nội dung ôn tập</h2>
+                <div class="subject-grid"><div class="subject-item"><div class="subject-icon"><i class="fas fa-calculator"></i></div><h3>Toán cao cấp</h3><p>Đạo hàm, tích phân, ma trận</p><button class="btn-view" data-syllabus="math">Xem đề cương</button></div><div class="subject-item"><div class="subject-icon"><i class="fab fa-python"></i></div><h3>Lập trình Python</h3><p>Cú pháp, OOP, thư viện</p><button class="btn-view" data-syllabus="python">Xem đề cương</button></div><div class="subject-item"><div class="subject-icon"><i class="fas fa-network-wired"></i></div><h3>Mạng máy tính</h3><p>OSI, TCP/IP, routing</p><button class="btn-view" data-syllabus="network">Xem đề cương</button></div></div>
+            </div>
+        </div>
+
+        <!-- TAB ĐIỀU KIỆN HỌC BỔNG -->
+        <div id="tab-hocbong" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-money-bill-wave"></i> Điều kiện học bổng</h2>
+                <div class="form-row"><div class="form-group"><label>Nhập GPA của bạn</label><input type="number" step="0.1" id="gpaFilter" class="form-input" placeholder="VD: 3.2"></div></div>
+                <button class="btn-submit" id="checkScholarshipBtn"><i class="fas fa-search"></i> Kiểm tra học bổng</button>
+                <div id="scholarshipResult" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+
+         <!-- TAB DỰ ĐOÁN ĐẠI HỌC - TỰ ĐỘNG HIỆN TỈ LỆ -->
+<div id="tab-dudoan" class="tab-content">
+    <div class="content-card">
+        <h2 class="section-title"><i class="fas fa-chart-line"></i> 🔮 Dự đoán đỗ Đại học 2026</h2>
+        <div class="info-box"><i class="fas fa-bolt"></i> Nhập điểm thi của bạn → Hệ thống sẽ tự động tính tỉ lệ đỗ cho từng ngành</div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-university"></i> Chọn khu vực</label>
+                <select id="filterRegion" class="form-select">
+                    <option value="all">🌍 Tất cả</option>
+                    <option value="mb">🏔️ Miền Bắc</option>
+                    <option value="mt">🏖️ Miền Trung</option>
+                    <option value="mn">🌴 Miền Nam</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-search"></i> Chọn trường đại học</label>
+                <select id="filterUniversity" class="form-select">
+                    <option value="all">-- Chọn trường --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-chart-simple"></i> Điểm thi của bạn (thang 30)</label>
+                <input type="number" id="userScore" step="0.1" class="form-input" placeholder="VD: 28.5" value="">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-calendar"></i> Năm tham khảo</label>
+                <select id="admissionYear" class="form-select">
+                    <option value="2025">Năm 2025</option>
+                    <option value="2024">Năm 2024</option>
+                    <option value="2023">Năm 2023</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-robot"></i> Phương thức xét tuyển</label>
+                <select id="admissionType" class="form-select">
+                    <option value="THPT">Xét điểm THPT (thang 30)</option>
+                    <option value="HSA">Xét HSA (thang 150)</option>
+                    <option value="TSA">Xét TSA (thang 100)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-sliders-h"></i> Độ nhạy dự đoán</label>
+                <select id="sensitivity" class="form-select">
+                    <option value="strict">🔴 Nghiêm ngặt (khó đỗ hơn)</option>
+                    <option value="normal" selected="selected">🟡 Bình thường</option>
+                    <option value="loose">🟢 Thoáng (dễ đỗ hơn)</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Hiển thị kết quả theo thời gian thực -->
+        <div id="predictionResult" style="margin-top: 24px;">
+            <div class="result-header" style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 15px 20px; border-radius: 20px; color: white; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <i class="fas fa-chart-line" style="font-size: 24px; margin-right: 10px;"></i>
+                        <span style="font-weight: 600;">KẾT QUẢ DỰ ĐOÁN</span>
+                    </div>
+                    <div id="scoreDisplayHeader">
+                        <i class="fas fa-star"></i> Chưa nhập điểm
+                    </div>
+                </div>
+            </div>
+            <div id="predictionList" class="prediction-list">
+                <div style="text-align: center; padding: 40px; color: #94a3b8;">
+                    <i class="fas fa-magic" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                    Vui lòng chọn trường và nhập điểm để xem dự đoán
+                </div>
+            </div>
+        </div>
+        
+        <div class="tip-box" style="margin-top: 16px;">
+            <i class="fas fa-info-circle"></i> 
+            💡 <strong>Hướng dẫn:</strong> Chọn trường → Nhập điểm → Hệ thống tự động tính tỉ lệ đỗ cho tất cả ngành.<br>
+            📊 <strong>Tỉ lệ đỗ được tính dựa trên:</strong> Chênh lệch điểm, độ khó của ngành, và xu hướng điểm chuẩn các năm.
+        </div>
+        </div>
+        </div>
+        <!-- TAB THAM KHẢO ĐẠI HỌC -->
+        <div id="tab-daihoc" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-university"></i> Tham khảo điểm chuẩn Đại học</h2>
+                <div class="form-row"><div class="form-group"><label>Tìm kiếm trường</label><input type="text" id="searchTruong" class="form-input" placeholder="Nhập tên trường..."></div><div class="form-group"><label>Khu vực</label><select id="filterKhuVuc" class="form-select"><option value="all">Tất cả</option><option value="mb">Miền Bắc</option><option value="mt">Miền Trung</option><option value="mn">Miền Nam</option></select></div></div>
+                <div class="school-list" id="schoolList"></div>
+                <div id="schoolDetail" style="display: none;"><div class="detail-header"><button class="btn-back" id="backToList"><i class="fas fa-arrow-left"></i> Quay lại</button><h3 id="detailSchoolName" style="margin-top: 8px;"></h3></div><div id="detailContent"></div></div>
+            </div>
+        </div>
+
+        <!-- TAB HƯỚNG DẪN -->
+        <div id="tab-huongdan" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-question-circle"></i> Hướng dẫn sử dụng</h2>
+                <div class="guide-content"><h3>📖 Hướng dẫn nhanh</h3><ol><li><i class="fas fa-check-circle" style="color: #10b981;"></i> Chọn thang điểm phù hợp</li><li><i class="fas fa-check-circle" style="color: #10b981;"></i> Nhập điểm vào các ô tương ứng</li><li><i class="fas fa-check-circle" style="color: #10b981;"></i> Hệ thống sẽ tự động tính kết quả</li></ol><div class="tip-box"><i class="fas fa-lightbulb"></i> Bấm "Đặt lại" để xóa toàn bộ điểm đã nhập</div></div>
+            </div>
+        </div>
+
+        <!-- TAB GÓP Ý -->
+        <div id="tab-gopy" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-comment-dots"></i> Góp ý & báo lỗi</h2>
+                <div class="feedback-form"><div class="form-group"><label>Họ tên (tùy chọn)</label><input type="text" id="fbName" class="form-input" placeholder="Nhập họ tên của bạn"></div><div class="form-group"><label>Email <span style="color: #ef4444;">*</span></label><input type="email" id="fbEmail" class="form-input" placeholder="your@email.com"></div><div class="form-group"><label>Loại phản hồi</label><select id="fbType" class="form-select"><option>Góp ý cải thiện</option><option>Báo lỗi hệ thống</option><option>Đề xuất tính năng</option></select></div><div class="form-group"><label>Nội dung <span style="color: #ef4444;">*</span></label><textarea id="fbContent" rows="4" class="form-textarea" placeholder="Vui lòng mô tả chi tiết..."></textarea></div><button class="btn-submit" id="sendFeedbackBtn"><i class="fas fa-paper-plane"></i> Gửi góp ý</button></div>
+            </div>
+        </div>
+
+        <!-- TAB VỀ CHÚNG TÔI -->
+        <div id="tab-vechungtoi" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-building"></i> Về chúng tôi</h2>
+                <div class="about-content"><div class="about-logo"><i class="fas fa-graduation-cap"></i> Hỗ Trợ Học Tập</div><p>Hệ thống tính điểm và hỗ trợ học tập dành cho sinh viên Việt Nam.</p><p>Với sứ mệnh giúp sinh viên dễ dàng theo dõi kết quả học tập, dự báo điểm và tối ưu lộ trình học.</p><div class="team-info"><h4>📞 Liên hệ với chúng tôi</h4><a href="mailto:trinhvantu1210@gmail.com" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fas fa-envelope"></i></span><span><strong>Email:</strong> trinhvantu1210@gmail.com</span></div></a><a href="https://zalo.me/0374145003" target="_blank" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fab fa-snapchat"></i></span><span><strong>Zalo:</strong> 0374.145.003</span></div></a><a href="tel:0769100185" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fas fa-phone"></i></span><span><strong>Điện thoại:</strong> 0769.100.185</span></div></a></div><div class="dev-info"><p><i class="fas fa-code"></i> Phát triển bởi <strong>F9 Team</strong></p><p>© 2026 Hỗ Trợ Học Tập - All rights reserved</p></div></div>
+            </div>
+        </div>
+
+        <!-- TAB ỦNG HỘ - CHỈ HIỆN QR -->
+        <div id="tab-ungho" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-heart"></i> Ủng hộ phát triển</h2>
+                <div class="donate-content">
+                    <div class="donate-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                    <p>Ủng hộ chúng tôi để phát triển thêm nhiều tính năng mới!</p>
+                    <p style="font-size: 13px; color: #666; margin-top: 8px;">Mọi đóng góp của bạn sẽ giúp duy trì và phát triển hệ thống tốt hơn 💖</p>
+                    
+                    <div class="donate-buttons">
+                        <button class="btn-donate-qr" onclick="showQRCodeInTab('momo')"><i class="fas fa-mobile-alt"></i> Momo</button>
+                        <button class="btn-donate-qr" onclick="showQRCodeInTab('bank')"><i class="fas fa-university"></i> Chuyển khoản</button>
+                        <button class="btn-donate-qr" onclick="showQRCodeInTab('viettelpay')"><i class="fas fa-phone"></i> ViettelPay</button>
+                    </div>
+                    
+                    <div id="qrDisplayArea" style="display: none; margin-top: 24px; padding: 20px; background: #f8fafc; border-radius: 20px; animation: fadeInUp 0.3s ease;">
+                        <div style="text-align: center;">
+                            <img id="qrCodeImageTab" src="" alt="QR Code" style="width: 220px; height: 220px; object-fit: contain; margin: 10px auto; border-radius: 16px;">
+                            <p id="qrInfoTab" style="margin-top: 15px; font-size: 13px; color: #64748b;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="syllabusModal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><div id="modalContent"></div></div></div>
+<!-- MODAL WELCOME POPUP -->
+<div id="welcomeModal" class="welcome-modal">
+    <div class="welcome-modal-content">
+        <button class="welcome-close" onclick="closeWelcome()">&times;</button>
+        <div class="welcome-icon">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h2>Chào mừng bạn đến với</h2>
+        <h1 class="welcome-title">Hỗ Trợ Học Tập</h1>
+        <p class="welcome-desc">Hệ thống tính điểm thông minh dành cho sinh viên Việt Nam</p>
+        
+        <div class="welcome-features">
+            <div class="welcome-feature">
+                <i class="fas fa-chart-line"></i>
+                <span>Tính điểm học phần</span>
+            </div>
+            <div class="welcome-feature">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Quy đổi chứng chỉ</span>
+            </div>
+            <div class="welcome-feature">
+                <i class="fas fa-university"></i>
+                <span>Dự đoán đỗ Đại học</span>
+            </div>
+            <div class="welcome-feature">
+                <i class="fas fa-moon"></i>
+                <span>Chế độ tối</span>
+            </div>
+        </div>
+        
+        <div class="welcome-buttons">
+            <button class="welcome-btn primary" onclick="closeWelcome()">
+                <i class="fas fa-rocket"></i> Bắt đầu trải nghiệm
+            </button>
+            <button class="welcome-btn secondary" onclick="dontShowAgain()">
+                <i class="fas fa-check-circle"></i> Không hiển thị lại
+            </button>
+        </div>
+        
+        <p class="welcome-note">✨ Công cụ miễn phí dành cho sinh viên</p>
+    </div>
+</div>
+<script src="data.js"></script>
+<script src="script.js"></script>
+
+</body>
+
+</html>
