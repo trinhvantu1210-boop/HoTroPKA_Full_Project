@@ -781,269 +781,7 @@ function initDarkMode() {
         } 
     });
 }
-// ==================== QUẢN LÝ TÀI LIỆU ÔN TẬP TỪ DISCORD ====================
-const DISCORD_WEBHOOK_DOCS = "https://discord.com/api/webhooks/1501907895665692762/B9YRT2ivPTE0AdVJdaPLUlOyrWpshZ9EoSLYe7IVAdA8eN-_y029b8_im5cb7guGWZBc";
-// ⚠️ THAY WEBHOOK URL TRÊN BẰNG CỦA BẠN ⚠️
 
-// Lưu trữ tài liệu trong localStorage
-let documents = [];
-
-// Load tài liệu từ localStorage
-function loadDocuments() {
-    const saved = localStorage.getItem('hotrohoctap_documents');
-    if (saved) {
-        documents = JSON.parse(saved);
-    } else {
-        // Dữ liệu mẫu ban đầu
-        documents = [
-            { id: Date.now(), subject: "Toán cao cấp", category: "toan", desc: "Đạo hàm, tích phân, ma trận, hệ phương trình", link: "#", createdAt: new Date().toISOString() },
-            { id: Date.now() + 1, subject: "Lập trình Python", category: "python", desc: "Cú pháp, OOP, thư viện Numpy, Pandas", link: "#", createdAt: new Date().toISOString() },
-            { id: Date.now() + 2, subject: "Mạng máy tính", category: "network", desc: "Mô hình OSI, TCP/IP, định tuyến, subnet", link: "#", createdAt: new Date().toISOString() }
-        ];
-        saveDocuments();
-    }
-    renderDocumentList();
-    renderDocumentsToHome();
-}
-
-// Lưu tài liệu
-function saveDocuments() {
-    localStorage.setItem('hotrohoctap_documents', JSON.stringify(documents));
-}
-
-// Hiển thị danh sách tài liệu trong trang quản lý
-function renderDocumentList() {
-    const container = document.getElementById('docListDisplay');
-    if (!container) return;
-    
-    if (documents.length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;">📭 Chưa có tài liệu nào. Hãy thêm tài liệu mới!</div>';
-        return;
-    }
-    
-    container.innerHTML = documents.map(doc => `
-        <div class="doc-item" data-id="${doc.id}">
-            <button class="delete-doc" onclick="deleteDocument(${doc.id})">✕</button>
-            <div class="doc-category">${getCategoryName(doc.category)}</div>
-            <div class="doc-title">📚 ${doc.subject}</div>
-            <div class="doc-desc">${doc.desc}</div>
-            <a href="${doc.link}" target="_blank" class="doc-link"><i class="fas fa-download"></i> Tải tài liệu</a>
-            <div style="font-size: 10px; color: #94a3b8; margin-top: 10px;">🕒 ${new Date(doc.createdAt).toLocaleDateString('vi-VN')}</div>
-        </div>
-    `).join('');
-}
-
-// Hiển thị tài liệu lên tab Nội dung ôn tập
-function renderDocumentsToHome() {
-    const container = document.querySelector('#tab-ontap .subject-grid');
-    if (!container) return;
-    
-    if (documents.length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:40px;grid-column:1/-1;">📭 Chưa có tài liệu ôn tập nào</div>';
-        return;
-    }
-    
-    container.innerHTML = documents.map(doc => `
-        <div class="subject-item" data-doc-id="${doc.id}">
-            <div class="subject-icon"><i class="fas fa-book-open"></i></div>
-            <h3>${doc.subject}</h3>
-            <p>${doc.desc}</p>
-            <a href="${doc.link}" target="_blank" class="btn-view" style="display:inline-block; text-decoration:none;">
-                <i class="fas fa-download"></i> Xem tài liệu
-            </a>
-        </div>
-    `).join('');
-}
-
-function getCategoryName(cat) {
-    const cats = { toan: "📐 Toán", python: "🐍 Python", network: "🌐 Mạng", other: "📁 Khác" };
-    return cats[cat] || "📁 Tài liệu";
-}
-
-// Thêm tài liệu mới
-function addDocument(subject, category, desc, link) {
-    const newDoc = {
-        id: Date.now(),
-        subject: subject,
-        category: category,
-        desc: desc,
-        link: link || "#",
-        createdAt: new Date().toISOString()
-    };
-    documents.unshift(newDoc);
-    saveDocuments();
-    renderDocumentList();
-    renderDocumentsToHome();
-    return newDoc;
-}
-
-// Xóa tài liệu
-function deleteDocument(id) {
-    if (confirm('Bạn có chắc muốn xóa tài liệu này?')) {
-        documents = documents.filter(doc => doc.id !== id);
-        saveDocuments();
-        renderDocumentList();
-        renderDocumentsToHome();
-        showToast('✅ Đã xóa tài liệu!', 'success');
-    }
-}
-
-// Xóa tất cả
-function clearAllDocuments() {
-    if (confirm('⚠️ Bạn có chắc muốn xóa TẤT CẢ tài liệu? Hành động này không thể hoàn tác!')) {
-        documents = [];
-        saveDocuments();
-        renderDocumentList();
-        renderDocumentsToHome();
-        showToast('🗑️ Đã xóa tất cả tài liệu!', 'warning');
-    }
-}
-
-// Gửi tài liệu lên Discord Webhook
-async function pushToDiscord(subject, category, desc, link, fileName = null) {
-    const embed = {
-        title: `📚 Tài liệu mới: ${subject}`,
-        color: 0x5865F2,
-        fields: [
-            { name: "📁 Chuyên mục", value: getCategoryName(category), inline: true },
-            { name: "📝 Mô tả", value: desc || "Không có mô tả", inline: false },
-            { name: "🔗 Link tải", value: link || "Chưa có link", inline: false }
-        ],
-        footer: { text: "HoTroHocTap - Quản lý tài liệu" },
-        timestamp: new Date().toISOString()
-    };
-    
-    if (fileName) {
-        embed.fields.push({ name: "📎 File đính kèm", value: fileName, inline: true });
-    }
-    
-    try {
-        const response = await fetch(DISCORD_WEBHOOK_DOCS, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ embeds: [embed] })
-        });
-        return response.ok;
-    } catch (error) {
-        console.error('Lỗi gửi Discord:', error);
-        return false;
-    }
-}
-
-// Upload file lên Discord (dùng file.io hoặc tương tự)
-async function uploadFileToTemp(file) {
-    // Dùng file.io để upload tạm (file tự hủy sau 14 ngày)
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    try {
-        const response = await fetch('https://file.io', {
-            method: 'POST',
-            body: formData
-        });
-        const data = await response.json();
-        if (data.success) {
-            return data.link;
-        }
-        return null;
-    } catch (error) {
-        console.error('Upload file thất bại:', error);
-        return null;
-    }
-}
-
-// Hiển thị thông báo
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#10b981' : '#f59e0b'};
-        color: white;
-        padding: 12px 20px;
-        border-radius: 12px;
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    `;
-    toast.innerHTML = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-}
-
-// Khởi tạo form quản lý tài liệu
-function initDocManager() {
-    const pushBtn = document.getElementById('pushToDiscordBtn');
-    const clearBtn = document.getElementById('clearDocsBtn');
-    const subjectInput = document.getElementById('docSubject');
-    const categorySelect = document.getElementById('docCategory');
-    const descInput = document.getElementById('docDesc');
-    const linkInput = document.getElementById('docLink');
-    const fileInput = document.getElementById('docFile');
-    const statusDiv = document.getElementById('uploadStatus');
-    
-    pushBtn?.addEventListener('click', async () => {
-        const subject = subjectInput?.value.trim();
-        const category = categorySelect?.value;
-        const desc = descInput?.value.trim();
-        let link = linkInput?.value.trim();
-        const file = fileInput?.files[0];
-        
-        if (!subject) {
-            showToast('⚠️ Vui lòng nhập tên môn học!', 'warning');
-            return;
-        }
-        
-        statusDiv.innerHTML = '<div style="color:#667eea;">⏳ Đang xử lý...</div>';
-        
-        // Nếu có file, upload lên tạm
-        if (file) {
-            statusDiv.innerHTML = '<div style="color:#667eea;">📤 Đang upload file lên server tạm...</div>';
-            const uploadedLink = await uploadFileToTemp(file);
-            if (uploadedLink) {
-                link = uploadedLink;
-                statusDiv.innerHTML = '<div style="color:#10b981;">✅ Đã upload file thành công!</div>';
-            } else {
-                statusDiv.innerHTML = '<div style="color:#ef4444;">❌ Upload file thất bại, vui lòng dùng link Google Drive!</div>';
-                return;
-            }
-        }
-        
-        if (!link) {
-            showToast('⚠️ Vui lòng nhập link tài liệu hoặc upload file!', 'warning');
-            statusDiv.innerHTML = '';
-            return;
-        }
-        
-        // Gửi lên Discord
-        statusDiv.innerHTML = '<div style="color:#667eea;">📡 Đang gửi thông báo lên Discord...</div>';
-        const discordSuccess = await pushToDiscord(subject, category, desc, link, file?.name);
-        
-        // Thêm vào database local
-        addDocument(subject, category, desc, link);
-        
-        statusDiv.innerHTML = `
-            <div style="color:#10b981;">✅ Đã thêm tài liệu thành công!</div>
-            <div style="font-size:12px; color:#64748b;">${discordSuccess ? 'Đã thông báo trên Discord' : 'Không thể gửi thông báo Discord'}</div>
-        `;
-        
-        // Reset form
-        if (subjectInput) subjectInput.value = '';
-        if (descInput) descInput.value = '';
-        if (linkInput) linkInput.value = '';
-        if (fileInput) fileInput.value = '';
-        
-        setTimeout(() => { if (statusDiv) statusDiv.innerHTML = ''; }, 3000);
-    });
-    
-    clearBtn?.addEventListener('click', clearAllDocuments);
-}
-
-// ==================== THÊM VÀO HÀM KHỞI TẠO ====================
-// Thêm vào cuối DOMContentLoaded:
-// loadDocuments();
-// initDocManager();
 // ==================== QR CODE TRONG TAB ====================
 function showQRCodeInTab(type) {
     const qrDisplay = document.getElementById('qrDisplayArea');
@@ -1056,7 +794,151 @@ function showQRCodeInTab(type) {
     qrDisplay.style.display = 'block';
     qrDisplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+// ==================== MẬT KHẨU QUẢN TRỊ ====================
+const ADMIN_PASSWORD = "Trami3101@";
+let isAdminMode = false;
 
+function verifyAdmin() {
+    const passwordInput = document.getElementById('adminPassword');
+    const authMessage = document.getElementById('authMessage');
+    const enteredPassword = passwordInput?.value || '';
+    
+    if (enteredPassword === ADMIN_PASSWORD) {
+        isAdminMode = true;
+        authMessage.innerHTML = '<div style="color:#10b981; padding:10px; background:#d4edda; border-radius:12px;">✅ Xác nhận thành công!</div>';
+        document.getElementById('adminAuthArea').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        sessionStorage.setItem('admin_logged', 'true');
+        renderDocumentList();
+        renderDocumentsToHome();
+    } else {
+        authMessage.innerHTML = '<div style="color:#ef4444; padding:10px; background:#fee2e2; border-radius:12px;">❌ Mật khẩu không đúng!</div>';
+    }
+}
+
+function logoutAdmin() {
+    isAdminMode = false;
+    sessionStorage.removeItem('admin_logged');
+    document.getElementById('adminAuthArea').style.display = 'block';
+    document.getElementById('adminContent').style.display = 'none';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('authMessage').innerHTML = '';
+    renderDocumentList();
+    renderDocumentsToHome();
+}
+
+function checkAdminSession() {
+    if (sessionStorage.getItem('admin_logged') === 'true') {
+        isAdminMode = true;
+        document.getElementById('adminAuthArea').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+    }
+}
+
+let documents = [];
+
+function loadDocuments() {
+    const saved = localStorage.getItem('hotrohoctap_documents');
+    if (saved) {
+        documents = JSON.parse(saved);
+    } else {
+        documents = [
+            { id: Date.now(), subject: "Toán cao cấp", category: "toan", desc: "Đạo hàm, tích phân, ma trận", link: "#", createdAt: new Date().toISOString() },
+            { id: Date.now() + 1, subject: "Lập trình Python", category: "python", desc: "Cú pháp, OOP, thư viện", link: "#", createdAt: new Date().toISOString() },
+            { id: Date.now() + 2, subject: "Mạng máy tính", category: "network", desc: "Mô hình OSI, TCP/IP", link: "#", createdAt: new Date().toISOString() }
+        ];
+        saveDocuments();
+    }
+    renderDocumentList();
+    renderDocumentsToHome();
+}
+
+function saveDocuments() {
+    localStorage.setItem('hotrohoctap_documents', JSON.stringify(documents));
+}
+
+function renderDocumentList() {
+    const container = document.getElementById('docListDisplay');
+    if (!container) return;
+    if (documents.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:40px;">📭 Chưa có tài liệu nào</div>';
+        return;
+    }
+    container.innerHTML = documents.map(doc => `
+        <div class="doc-item">
+            ${isAdminMode ? `<button class="delete-doc" onclick="deleteDocument(${doc.id})">✕</button>` : ''}
+            <div class="doc-category">${getCategoryName(doc.category)}</div>
+            <div class="doc-title">📚 ${doc.subject}</div>
+            <div class="doc-desc">${doc.desc}</div>
+            <a href="${doc.link}" target="_blank" class="doc-link"><i class="fas fa-download"></i> Tải tài liệu</a>
+        </div>
+    `).join('');
+}
+
+function renderDocumentsToHome() {
+    const container = document.querySelector('#tab-ontap .subject-grid');
+    if (!container) return;
+    container.innerHTML = documents.map(doc => `
+        <div class="subject-item">
+            <div class="subject-icon"><i class="fas fa-book-open"></i></div>
+            <h3>${doc.subject}</h3>
+            <p>${doc.desc}</p>
+            <a href="${doc.link}" target="_blank" class="btn-view">Xem tài liệu</a>
+        </div>
+    `).join('');
+}
+
+function getCategoryName(cat) {
+    const cats = { toan: "📐 Toán", python: "🐍 Python", network: "🌐 Mạng", other: "📁 Khác" };
+    return cats[cat] || "📁 Tài liệu";
+}
+
+function addDocument(subject, category, desc, link) {
+    if (!isAdminMode) { alert('🔒 Chỉ quản trị viên!'); return false; }
+    documents.unshift({ id: Date.now(), subject, category, desc, link, createdAt: new Date().toISOString() });
+    saveDocuments();
+    renderDocumentList();
+    renderDocumentsToHome();
+    return true;
+}
+
+function deleteDocument(id) {
+    if (!isAdminMode) { alert('🔒 Chỉ quản trị viên!'); return; }
+    if (confirm('Xóa tài liệu này?')) {
+        documents = documents.filter(doc => doc.id !== id);
+        saveDocuments();
+        renderDocumentList();
+        renderDocumentsToHome();
+    }
+}
+
+function clearAllDocuments() {
+    if (!isAdminMode) { alert('🔒 Chỉ quản trị viên!'); return; }
+    if (confirm('Xóa TẤT CẢ tài liệu?')) {
+        documents = [];
+        saveDocuments();
+        renderDocumentList();
+        renderDocumentsToHome();
+    }
+}
+
+function initDocManager() {
+    document.getElementById('verifyAdminBtn')?.addEventListener('click', verifyAdmin);
+    document.getElementById('logoutAdminBtn')?.addEventListener('click', logoutAdmin);
+    document.getElementById('pushToDiscordBtn')?.addEventListener('click', () => {
+        const subject = document.getElementById('docSubject')?.value;
+        const category = document.getElementById('docCategory')?.value;
+        const desc = document.getElementById('docDesc')?.value;
+        const link = document.getElementById('docLink')?.value;
+        if (!subject || !link) { alert('⚠️ Nhập đủ thông tin!'); return; }
+        addDocument(subject, category, desc, link);
+        document.getElementById('docSubject').value = '';
+        document.getElementById('docDesc').value = '';
+        document.getElementById('docLink').value = '';
+        alert('✅ Đã thêm tài liệu!');
+    });
+    document.getElementById('clearDocsBtn')?.addEventListener('click', clearAllDocuments);
+}
 // ==================== MOBILE MENU ====================
 function closeMobileMenu() { 
     document.querySelector('.sidebar')?.classList.remove('active'); 
@@ -1145,10 +1027,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initDuDoan();
     initUniversities();
     initFeedback();
-    loadDocuments();
-    initDocManager();
     initDarkMode();
     initMobileMenu();
     initHomeTabLinks();
+    loadDocuments();
+checkAdminSession();
+initDocManager();
     console.log('✅ Hỗ Trợ Học Tập - Hệ thống đã sẵn sàng!');
 });
