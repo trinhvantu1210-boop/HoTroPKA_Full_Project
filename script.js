@@ -1,3 +1,8 @@
+if (window.location.pathname.toLowerCase().includes('/admin')) {
+    // Chuyển hướng về trang 404 lỗi (không tìm thấy)
+    window.location.href = '/404.html';
+    // Hoặc chuyển về trang chủ: window.location.href = '/';
+}
 // ==================== DỮ LIỆU THANG ĐIỂM ====================
 const gradeScale9Data = [
     {min: 9.0, max: 10, letter: "A+", grade4: 4.0},
@@ -53,17 +58,9 @@ const universityList = [
 
 // ==================== DỮ LIỆU QR ====================
 const qrDataTab = {
-    momo: {
-        image: 'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=2|99|0769100185|TRINH VAN TU|0|0|0|&chld=H|0',
-        info: '💜 Quét mã Momo để ủng hộ'
-    },
     bank: {
-        image: 'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=0769100185&chld=H|0',
+        image: 'https://cdn.phototourl.com/free/2026-05-07-249ccad0-03ef-41f8-89d3-d4a1c8dbb1c5.jpg',
         info: '🏦 Quét mã ngân hàng MBBANK để ủng hộ'
-    },
-    viettelpay: {
-        image: 'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=0769100185&chld=H|0',
-        info: '📱 Quét mã ViettelPay để ủng hộ'
     }
 };
 
