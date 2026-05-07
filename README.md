@@ -13,17 +13,8 @@ Hệ thống hỗ trợ sinh viên tính điểm học phần, quy đổi chứn
 - Dark mode
 - Gửi góp ý qua Discord Webhook
 
-## 📁 Cấu trúc
-- `index.html` - Giao diện chính
-- `style.css` - CSS
-- `script.js` - JavaScript
-- `data.js` - Database trường đại học
-
-## 🌐 Link demo
-[https://ten-cua-ban.netlify.app](https://ten-cua-ban.netlify.app)
-
 ## 👨‍💻 Tác giả
 F9 Exploit Team
 
-## 📧 Liên hệ
+## 📧 Bản quyền Liên Hệ 
 trinhvantu1210@gmail.com

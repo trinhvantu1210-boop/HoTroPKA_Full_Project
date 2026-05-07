@@ -48,15 +48,16 @@
             </nav>
         </div>
         <div class="nav-group">
-            <div class="nav-group-title">CÔNG CỤ</div>
-            <nav class="nav-menu">
-                <a class="nav-item" data-tab="tab-quydoi"><span class="nav-icon"><i class="fas fa-arrows-rotate"></i></span><span>Quy đổi chứng chỉ</span></a>
-                <a class="nav-item" data-tab="tab-ontap"><span class="nav-icon"><i class="fas fa-book-open"></i></span><span>Nội dung ôn tập</span></a>
-                <a class="nav-item" data-tab="tab-hocbong"><span class="nav-icon"><i class="fas fa-money-bill-wave"></i></span><span>Điều kiện học bổng</span></a>
-                <a class="nav-item" data-tab="tab-dudoan"><span class="nav-icon"><i class="fas fa-chart-line"></i></span><span>Tính điểm xét tuyển</span></a>
-                <a class="nav-item" data-tab="tab-daihoc"><span class="nav-icon"><i class="fas fa-university"></i></span><span>Tham khảo Đại học</span></a>
-            </nav>
-        </div>
+    <div class="nav-group-title">CÔNG CỤ</div>
+    <nav class="nav-menu">
+        <a class="nav-item" data-tab="tab-quydoi"><span class="nav-icon"><i class="fas fa-arrows-rotate"></i></span><span>Quy đổi chứng chỉ</span></a>
+        <a class="nav-item" data-tab="tab-ontap"><span class="nav-icon"><i class="fas fa-book-open"></i></span><span>Nội dung ôn tập</span></a>
+        <a class="nav-item" data-tab="tab-hocbong"><span class="nav-icon"><i class="fas fa-money-bill-wave"></i></span><span>Điều kiện học bổng</span></a>
+        <a class="nav-item" data-tab="tab-dudoan"><span class="nav-icon"><i class="fas fa-chart-line"></i></span><span>Tính điểm xét tuyển</span></a>
+        <a class="nav-item" data-tab="tab-daihoc"><span class="nav-icon"><i class="fas fa-university"></i></span><span>Tham khảo Đại học</span></a>
+        <a class="nav-item" data-tab="tab-quanly-tailieu"><span class="nav-icon"><i class="fas fa-database"></i></span><span>Quản lý tài liệu</span></a>
+    </nav>
+</div>
         <div class="nav-group">
             <div class="nav-group-title">HỖ TRỢ</div>
             <nav class="nav-menu">
@@ -287,7 +288,65 @@
                 <div class="about-content"><div class="about-logo"><i class="fas fa-graduation-cap"></i> Hỗ Trợ Học Tập</div><p>Hệ thống tính điểm và hỗ trợ học tập dành cho sinh viên Việt Nam.</p><p>Với sứ mệnh giúp sinh viên dễ dàng theo dõi kết quả học tập, dự báo điểm và tối ưu lộ trình học.</p><div class="team-info"><h4>📞 Liên hệ với chúng tôi</h4><a href="mailto:trinhvantu1210@gmail.com" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fas fa-envelope"></i></span><span><strong>Email:</strong> trinhvantu1210@gmail.com</span></div></a><a href="https://zalo.me/0374145003" target="_blank" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fab fa-snapchat"></i></span><span><strong>Zalo:</strong> 0374.145.003</span></div></a><a href="tel:0769100185" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fas fa-phone"></i></span><span><strong>Điện thoại:</strong> 0769.100.185</span></div></a></div><div class="dev-info"><p><i class="fas fa-code"></i> Phát triển bởi <strong>F9 Team</strong></p><p>© 2026 Hỗ Trợ Học Tập - All rights reserved</p></div></div>
             </div>
         </div>
-
+        <!-- TAB QUẢN LÝ TÀI LIỆU (CHỈ ADMIN) -->
+<div id="tab-quanly-tailieu" class="tab-content">
+    <div class="content-card">
+        <h2 class="section-title"><i class="fas fa-database"></i> Quản lý tài liệu ôn tập</h2>
+        
+        <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b;">
+            <i class="fas fa-lock"></i> ⚠️ Trang này chỉ dành cho quản trị viên
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">📚 Tên môn học</label>
+                <input type="text" id="docSubject" class="form-input" placeholder="VD: Toán cao cấp, Lập trình Python...">
+            </div>
+            <div class="form-group">
+                <label class="form-label">📁 Chuyên mục</label>
+                <select id="docCategory" class="form-select">
+                    <option value="toan">Toán cao cấp</option>
+                    <option value="python">Lập trình Python</option>
+                    <option value="network">Mạng máy tính</option>
+                    <option value="other">Khác</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">📝 Mô tả ngắn</label>
+                <input type="text" id="docDesc" class="form-input" placeholder="Nội dung chính của tài liệu...">
+            </div>
+            <div class="form-group">
+                <label class="form-label">🔗 Link tài liệu (Google Drive, Dropbox...)</label>
+                <input type="url" id="docLink" class="form-input" placeholder="https://drive.google.com/...">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">📎 Hoặc upload file PDF/DOCX</label>
+                <input type="file" id="docFile" class="form-input" accept=".pdf,.docx,.txt,.zip">
+            </div>
+        </div>
+        
+        <div id="uploadStatus" style="margin: 15px 0;"></div>
+        
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <button class="btn-submit" id="pushToDiscordBtn">
+                <i class="fab fa-discord"></i> Đẩy lên Discord
+            </button>
+        </div>
+        
+        <hr style="margin: 30px 0;">
+        
+        <h3><i class="fas fa-list"></i> Danh sách tài liệu đã có</h3>
+        <div id="docListDisplay" class="doc-list" style="margin-top: 20px;">
+            <!-- Sẽ hiển thị danh sách tài liệu -->
+        </div>
+        </div>
+        </div>
         <!-- TAB ỦNG HỘ - CHỈ HIỆN QR -->
         <div id="tab-ungho" class="tab-content">
             <div class="content-card">
