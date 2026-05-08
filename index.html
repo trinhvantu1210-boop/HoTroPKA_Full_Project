@@ -366,56 +366,61 @@
                 <div class="feedback-form"><div class="form-group"><label>Họ tên (tùy chọn)</label><input type="text" id="fbName" class="form-input" placeholder="Nhập họ tên của bạn"></div><div class="form-group"><label>Email <span style="color: #ef4444;">*</span></label><input type="email" id="fbEmail" class="form-input" placeholder="your@email.com"></div><div class="form-group"><label>Loại phản hồi</label><select id="fbType" class="form-select"><option>Góp ý cải thiện</option><option>Báo lỗi hệ thống</option><option>Đề xuất tính năng</option></select></div><div class="form-group"><label>Nội dung <span style="color: #ef4444;">*</span></label><textarea id="fbContent" rows="4" class="form-textarea" placeholder="Vui lòng mô tả chi tiết..."></textarea></div><button class="btn-submit" id="sendFeedbackBtn"><i class="fas fa-paper-plane"></i> Gửi góp ý</button></div>
             </div>
         </div>
-                        <!-- Tab Chat -->
-<div id="tab-chat" class="tab-content">
-    <div class="content-card">
-        <h2 class="section-title"><i class="fas fa-comments"></i> Chat công cộng</h2>
         
-        <!-- Thông báo trạng thái khóa tên -->
-        <div id="nameLockBanner" style="padding: 12px 16px; border-radius: 16px; margin-bottom: 20px;">
-            <!-- Nội dung sẽ được JavaScript cập nhật -->
-        </div>
-        
-        <!-- Khung chat -->
-        <div class="chat-container">
-            <div id="chatMessages" class="chat-messages">
-                <div style="text-align: center; color: #94a3b8; padding: 40px;">
-                    <i class="fas fa-spinner fa-pulse"></i> Đang tải tin nhắn...
+
+                 <!-- TAB CHAT CÔNG CỘNG -->
+        <div id="tab-chat" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title"><i class="fas fa-comments"></i> Chat công cộng</h2>
+                
+                <!-- BANNER KHÓA TÊN - LUÔN HIỂN THỊ -->
+                <div id="nameLockBanner" style="margin-bottom: 20px;"></div>
+                
+                <!-- KHUNG HIỂN THỊ TIN NHẮN -->
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div style="text-align: center; color: #94a3b8; padding: 40px;">
+                            <i class="fas fa-spinner fa-pulse"></i> Đang tải tin nhắn...
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Form nhập liệu -->
-        <div id="chatInputArea" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px;">
-            <div style="flex: 2; min-width: 180px;">
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="chatName" class="form-input" placeholder="Tên hiển thị" maxlength="30" style="flex: 2;">
-                    <button id="randomNameBtn" class="btn-reset" style="margin: 0; padding: 0 12px; background: #667eea;" title="Đổi tên ngẫu nhiên">
-                        <i class="fas fa-dice"></i>
+                
+                <!-- Ô NHẬP TIN NHẮN -->
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px;">
+                    <div style="flex: 2; min-width: 180px;">
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="chatName" class="form-input" placeholder="Tên hiển thị" maxlength="30" style="flex: 2;">
+                            <button id="randomNameBtn" class="btn-reset" style="margin: 0; padding: 0 12px; background: #667eea; cursor: pointer;">
+                                <i class="fas fa-dice"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div style="flex: 5; min-width: 200px;">
+                        <input type="text" id="chatMessage" class="form-input" placeholder="Nhập tin nhắn..." maxlength="500" onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                    </div>
+                    <div>
+                        <button class="btn-submit" id="sendChatBtn" style="cursor: pointer;">
+                            <i class="fas fa-paper-plane"></i> Gửi
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- FOOTER -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <span id="messageCount" style="font-size: 13px; color: #64748b;"></span>
+                    </div>
+                    <button id="clearAllChatBtn" class="btn-reset" style="margin: 0; padding: 6px 15px; font-size: 12px; background: #ef4444; cursor: pointer;">
+                        <i class="fas fa-trash-alt"></i> Xóa toàn bộ (Admin)
                     </button>
                 </div>
-                <div id="nameLockStatus" style="font-size: 11px; margin-top: 5px;"></div>
-            </div>
-            <div style="flex: 5; min-width: 200px;">
-                <input type="text" id="chatMessage" class="form-input" placeholder="Nhập tin nhắn..." maxlength="500" onkeypress="if(event.key === 'Enter') sendChatMessage()">
-            </div>
-            <div>
-                <button class="btn-submit" id="sendChatBtn">
-                    <i class="fas fa-paper-plane"></i> Gửi
-                </button>
             </div>
         </div>
-        
-        <!-- Footer chat -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; flex-wrap: wrap; gap: 10px;">
-            <div class="chat-online-status">
-                <span class="online-dot"></span>
-                <span id="onlineStatus">Đã kết nối</span>
-                <span id="messageCount" style="margin-left: 10px;"></span>
-            </div>
-        </div>
-    </div>
-</div>
+
+
+
+
+
 
         <!-- TAB VỀ CHÚNG TÔI -->
         <div id="tab-vechungtoi" class="tab-content">

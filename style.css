@@ -2558,3 +2558,27 @@ input, textarea, .form-input, .chat-message, .chat-bubble {
     user-select: text !important;
     -webkit-user-select: text !important;
 }
+
+
+
+/* lock 
+/* ========= BANNER KHÓA TÊN CHAT ========= */
+#nameLockBanner {
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+#nameLockBanner div {
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
