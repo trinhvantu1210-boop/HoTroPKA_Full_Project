@@ -1175,7 +1175,7 @@ startFallingParticles();
 pageFallEffect();
 
 // Chat 
-// ==================== CHAT VỚI KHÓA TÊN (CHỈ ADMIN) ====================
+// ==================== CHAT VỚI KHÓA TÊN (FIX CHO MOBILE) ====================
 let currentUserName = '';
 let currentUserId = '';
 let isAdmin = false;
@@ -1186,6 +1186,7 @@ let lockExpiryTime = null;
 function initChat() {
     if (!window.chatAPI) {
         console.error('❌ Chat API chưa được tải!');
+        setTimeout(() => initChat(), 500);
         return;
     }
     
@@ -1199,7 +1200,6 @@ function initChat() {
     if (savedLock === 'true' && savedExpiry) {
         lockExpiryTime = parseInt(savedExpiry);
         if (Date.now() >= lockExpiryTime) {
-            // Hết hạn, tự động mở khóa
             isNameLocked = false;
             localStorage.removeItem('chat_name_locked');
             localStorage.removeItem('chat_lock_expiry');
@@ -1216,34 +1216,13 @@ function initChat() {
     if (nameInput) {
         nameInput.value = currentUserName;
         nameInput.readOnly = isNameLocked;
-    }
-    
-    // Cập nhật UI
-    updateLockUI();
-    
-    // Nút random tên
-    const randomBtn = document.getElementById('randomNameBtn');
-    if (randomBtn) {
-        randomBtn.onclick = function() {
+        
+        // Sự kiện change cho mobile
+        nameInput.addEventListener('change', function(e) {
+            e.preventDefault();
             if (isNameLocked) {
                 const remaining = getRemainingTime();
-                showToast(`🔒 Tên đã bị khóa! Còn ${remaining} nữa mới được đổi tên.`, 'warning');
-                return;
-            }
-            const newName = window.chatAPI.randomizeUserName();
-            if (nameInput) nameInput.value = newName;
-            updateUserName(newName);
-            this.style.transform = 'rotate(360deg)';
-            setTimeout(() => { if(randomBtn) randomBtn.style.transform = ''; }, 300);
-        };
-    }
-    
-    // Sự kiện đổi tên thủ công
-    if (nameInput) {
-        nameInput.addEventListener('change', function() {
-            if (isNameLocked) {
-                const remaining = getRemainingTime();
-                showToast(`🔒 Tên đã bị khóa! Còn ${remaining} nữa mới được đổi tên.`, 'warning');
+                showToastMobile(`🔒 Tên đã bị khóa! Còn ${remaining}`, 'warning');
                 this.value = currentUserName;
                 return;
             }
@@ -1252,9 +1231,43 @@ function initChat() {
                 updateUserName(newName);
             }
         });
+        
+        // Sự kiện input cho mobile
+        nameInput.addEventListener('input', function() {
+            if (isNameLocked) {
+                this.value = currentUserName;
+            }
+        });
+    }
+    
+    // Nút random tên (fix cho mobile)
+    const randomBtn = document.getElementById('randomNameBtn');
+    if (randomBtn) {
+        // Xóa event cũ nếu có
+        const newRandomBtn = randomBtn.cloneNode(true);
+        randomBtn.parentNode.replaceChild(newRandomBtn, randomBtn);
+        
+        newRandomBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (isNameLocked) {
+                const remaining = getRemainingTime();
+                showToastMobile(`🔒 Tên đã bị khóa! Còn ${remaining}`, 'warning');
+                return;
+            }
+            const newName = window.chatAPI.randomizeUserName();
+            const nameInputEl = document.getElementById('chatName');
+            if (nameInputEl) nameInputEl.value = newName;
+            updateUserName(newName);
+            this.style.transform = 'rotate(360deg)';
+            setTimeout(() => { if(this) this.style.transform = ''; }, 300);
+        };
     }
     
     isAdmin = window.chatAPI.isAdminUser(currentUserName);
+    
+    // Cập nhật UI
+    updateLockUI();
     renderChatMessages();
     
     // Tự động cập nhật mỗi 3 giây
@@ -1264,62 +1277,58 @@ function initChat() {
     }, 3000);
 }
 
-// Hiển thị popup xác nhận khóa tên (chỉ admin mới thấy nút)
+// Hiển thị popup xác nhận (fix cho mobile)
 function showLockConfirmPopup() {
-    // Kiểm tra xem người dùng có phải admin không
     const nameInput = document.getElementById('chatName');
     const currentName = nameInput?.value || '';
     
     if (!window.chatAPI.isAdminUser(currentName)) {
-        showToast('🔒 Chỉ Admin mới có quyền khóa/mở khóa tên!', 'error');
+        showToastMobile('🔒 Chỉ Admin mới có quyền khóa/mở khóa tên!', 'error');
         return;
     }
     
     // Tạo popup
     const popup = document.createElement('div');
     popup.className = 'confirm-popup';
+    popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);display:flex;justify-content:center;align-items:center;z-index:10001;';
     popup.innerHTML = `
-        <div class="confirm-popup-content">
-            <h3>${isNameLocked ? '🔓 Mở khóa tên' : '🔒 Khóa tên'}</h3>
-            <p>${isNameLocked ? 
+        <div style="background:white;border-radius:24px;padding:25px;max-width:350px;width:90%;text-align:center;animation:scaleIn 0.2s ease;">
+            <h3 style="font-size:22px;margin-bottom:15px;color:#1e293b;">${isNameLocked ? '🔓 Mở khóa tên' : '🔒 Khóa tên'}</h3>
+            <p style="color:#64748b;margin-bottom:25px;line-height:1.5;">${isNameLocked ? 
                 'Bạn có chắc muốn MỞ KHÓA tên? Mọi người sẽ có thể đổi tên ngay lập tức.' : 
                 '⚠️ Bạn có chắc muốn KHÓA tên? Sau khi khóa, 7 NGÀY sau mới có thể mở lại!'
             }</p>
-            <div class="confirm-popup-buttons">
-                <button class="confirm-popup-btn cancel">Hủy</button>
-                <button class="confirm-popup-btn confirm">${isNameLocked ? 'Mở khóa' : 'Xác nhận khóa'}</button>
+            <div style="display:flex;gap:15px;justify-content:center;">
+                <button id="popupCancel" style="background:#e2e8f0;color:#475569;padding:10px 25px;border-radius:40px;font-weight:600;border:none;cursor:pointer;">Hủy</button>
+                <button id="popupConfirm" style="background:${isNameLocked ? '#10b981' : '#ef4444'};color:white;padding:10px 25px;border-radius:40px;font-weight:600;border:none;cursor:pointer;">${isNameLocked ? 'Mở khóa' : 'Xác nhận khóa'}</button>
             </div>
         </div>
     `;
     
     document.body.appendChild(popup);
     
-    // Xử lý sự kiện
-    popup.querySelector('.cancel').onclick = () => popup.remove();
-    popup.querySelector('.confirm').onclick = () => {
+    document.getElementById('popupCancel')?.addEventListener('click', () => popup.remove());
+    document.getElementById('popupConfirm')?.addEventListener('click', () => {
         if (isNameLocked) {
-            // Mở khóa ngay
             isNameLocked = false;
             localStorage.removeItem('chat_name_locked');
             localStorage.removeItem('chat_lock_expiry');
-            const nameInput = document.getElementById('chatName');
-            if (nameInput) nameInput.readOnly = false;
-            showToast('✅ Đã mở khóa tên! Mọi người có thể đổi tên.', 'success');
+            const nameInputEl = document.getElementById('chatName');
+            if (nameInputEl) nameInputEl.readOnly = false;
+            showToastMobile('✅ Đã mở khóa tên!', 'success');
         } else {
-            // Khóa trong 7 ngày
             isNameLocked = true;
             lockExpiryTime = Date.now() + (7 * 24 * 60 * 60 * 1000);
             localStorage.setItem('chat_name_locked', 'true');
             localStorage.setItem('chat_lock_expiry', lockExpiryTime.toString());
-            const nameInput = document.getElementById('chatName');
-            if (nameInput) nameInput.readOnly = true;
-            
+            const nameInputEl = document.getElementById('chatName');
+            if (nameInputEl) nameInputEl.readOnly = true;
             const expiryDate = new Date(lockExpiryTime);
-            showToast(`🔒 Đã khóa tên! Sẽ tự động mở khóa vào: ${expiryDate.toLocaleString('vi-VN')}`, 'info');
+            showToastMobile(`🔒 Đã khóa tên đến: ${expiryDate.toLocaleDateString('vi-VN')}`, 'info');
         }
         updateLockUI();
         popup.remove();
-    };
+    });
 }
 
 // Cập nhật UI khóa tên
@@ -1328,50 +1337,55 @@ function updateLockUI() {
     const lockStatusSpan = document.getElementById('nameLockStatus');
     const lockBanner = document.getElementById('nameLockBanner');
     
-    // Tạo hoặc cập nhật nút khóa trong banner
-    if (lockBanner) {
-        const currentName = nameInput?.value || '';
-        const isCurrentAdmin = window.chatAPI.isAdminUser(currentName);
-        
-        if (isNameLocked) {
-            const remaining = getRemainingTime();
-            lockBanner.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: #fee2e2; border-radius: 16px; padding: 12px 16px;">
-                    <div>
-                        <i class="fas fa-lock" style="color: #ef4444;"></i>
-                        <strong style="color: #ef4444;">🔒 TÊN ĐÃ BỊ KHÓA</strong>
-                        <span style="color: #64748b; margin-left: 10px;">Còn ${remaining} mới được đổi tên</span>
-                    </div>
-                    ${isCurrentAdmin ? `<button id="toggleLockBtn" class="btn-reset" style="margin: 0; padding: 6px 15px; background: #10b981;"><i class="fas fa-unlock"></i> Mở khóa</button>` : ''}
+    if (!lockBanner) return;
+    
+    const currentName = nameInput?.value || '';
+    const isCurrentAdmin = window.chatAPI ? window.chatAPI.isAdminUser(currentName) : false;
+    
+    if (isNameLocked) {
+        const remaining = getRemainingTime();
+        lockBanner.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: #fee2e2; border-radius: 16px; padding: 12px 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <i class="fas fa-lock" style="color: #ef4444;"></i>
+                    <strong style="color: #ef4444;">🔒 TÊN ĐÃ BỊ KHÓA</strong>
+                    <span style="color: #64748b; font-size: 12px;">Còn ${remaining}</span>
                 </div>
-            `;
-        } else {
-            lockBanner.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: #d4edda; border-radius: 16px; padding: 12px 16px;">
-                    <div>
-                        <i class="fas fa-unlock" style="color: #10b981;"></i>
-                        <strong style="color: #10b981;">🔓 TÊN ĐANG MỞ</strong>
-                        <span style="color: #64748b; margin-left: 10px;">Mọi người có thể đổi tên</span>
-                    </div>
-                    ${isCurrentAdmin ? `<button id="toggleLockBtn" class="btn-reset" style="margin: 0; padding: 6px 15px; background: #ef4444;"><i class="fas fa-lock"></i> Khóa tên (7 ngày)</button>` : ''}
+                ${isCurrentAdmin ? `<button id="toggleLockBtn" class="btn-reset" style="margin: 0; padding: 8px 16px; background: #10b981; border: none; border-radius: 30px; color: white; cursor: pointer;"><i class="fas fa-unlock"></i> Mở khóa</button>` : ''}
+            </div>
+        `;
+    } else {
+        lockBanner.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: #d4edda; border-radius: 16px; padding: 12px 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <i class="fas fa-unlock" style="color: #10b981;"></i>
+                    <strong style="color: #10b981;">🔓 TÊN ĐANG MỞ</strong>
+                    <span style="color: #64748b; font-size: 12px;">Mọi người có thể đổi tên</span>
                 </div>
-            `;
-        }
-        
-        // Gắn sự kiện cho nút khóa (nếu có)
-        const toggleBtn = document.getElementById('toggleLockBtn');
-        if (toggleBtn) {
-            toggleBtn.onclick = showLockConfirmPopup;
-        }
+                ${isCurrentAdmin ? `<button id="toggleLockBtn" class="btn-reset" style="margin: 0; padding: 8px 16px; background: #ef4444; border: none; border-radius: 30px; color: white; cursor: pointer;"><i class="fas fa-lock"></i> Khóa tên (7 ngày)</button>` : ''}
+            </div>
+        `;
+    }
+    
+    const toggleBtn = document.getElementById('toggleLockBtn');
+    if (toggleBtn) {
+        // Xóa event cũ để tránh trùng
+        const newBtn = toggleBtn.cloneNode(true);
+        toggleBtn.parentNode.replaceChild(newBtn, toggleBtn);
+        newBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            showLockConfirmPopup();
+        };
     }
     
     if (lockStatusSpan) {
         if (isNameLocked) {
             const remaining = getRemainingTime();
-            lockStatusSpan.innerHTML = `<i class="fas fa-lock"></i> Tên đã bị khóa (còn ${remaining})`;
+            lockStatusSpan.innerHTML = `<i class="fas fa-lock"></i> Đã khóa (${remaining})`;
             lockStatusSpan.style.color = '#ef4444';
         } else {
-            lockStatusSpan.innerHTML = `<i class="fas fa-unlock"></i> Tên đang mở (có thể đổi tên)`;
+            lockStatusSpan.innerHTML = `<i class="fas fa-unlock"></i> Đang mở`;
             lockStatusSpan.style.color = '#10b981';
         }
     }
@@ -1381,59 +1395,33 @@ function updateLockUI() {
     }
 }
 
-// Lấy thời gian còn lại
-function getRemainingTime() {
-    if (!lockExpiryTime) return 'không xác định';
-    const remaining = lockExpiryTime - Date.now();
-    if (remaining <= 0) return '0 ngày';
-    const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((remaining % (86400000)) / (1000 * 60 * 60));
-    const minutes = Math.floor((remaining % (3600000)) / (1000 * 60));
-    if (days > 0) return `${days} ngày ${hours} giờ`;
-    if (hours > 0) return `${hours} giờ ${minutes} phút`;
-    return `${minutes} phút`;
-}
-
-// Cập nhật tên người dùng
-function updateUserName(newName) {
-    if (newName.length > 30) newName = newName.substring(0, 30);
-    currentUserName = newName;
-    window.chatAPI.setCurrentUserName(newName);
-    isAdmin = window.chatAPI.isAdminUser(newName);
-    
-    // Cập nhật lại UI khóa (vì admin status có thể thay đổi)
-    updateLockUI();
-    renderChatMessages();
-    
-    showToast(`✅ Đã đổi tên thành: ${newName}`, 'success');
-}
-
-// Hiển thị thông báo nhỏ
-function showToast(message, type = 'info') {
+// Thông báo cho mobile
+function showToastMobile(message, type = 'info') {
     const toast = document.createElement('div');
     toast.style.cssText = `
         position: fixed;
-        bottom: 20px;
-        right: 20px;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
         background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#667eea'};
         color: white;
-        padding: 12px 20px;
-        border-radius: 12px;
+        padding: 10px 20px;
+        border-radius: 30px;
         z-index: 10002;
-        animation: slideIn 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        max-width: 300px;
         font-size: 14px;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        animation: fadeInUp 0.3s ease;
     `;
     toast.innerHTML = message;
     document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+    setTimeout(() => toast.remove(), 2500);
 }
 
-// Gửi tin nhắn
+// Gửi tin nhắn (fix cho mobile)
 function sendChatMessage() {
     if (!window.chatAPI) {
-        alert('❌ Chat chưa sẵn sàng!');
+        showToastMobile('❌ Chat chưa sẵn sàng!', 'error');
         return;
     }
     
@@ -1449,20 +1437,20 @@ function sendChatMessage() {
     }
     
     if (!message) {
-        showToast('⚠️ Vui lòng nhập tin nhắn!', 'warning');
+        showToastMobile('⚠️ Vui lòng nhập tin nhắn!', 'warning');
         return;
     }
     
     if (isNameLocked && name !== currentUserName) {
         const remaining = getRemainingTime();
-        showToast(`🔒 Tên đã bị khóa! Còn ${remaining} nữa mới được đổi tên.`, 'warning');
+        showToastMobile(`🔒 Tên đã khóa! Còn ${remaining}`, 'warning');
         if (nameInput) nameInput.value = currentUserName;
         return;
     }
     
     if (name.length > 30) name = name.substring(0, 30);
     if (message.length > 500) {
-        showToast('⚠️ Tin nhắn không quá 500 ký tự!', 'warning');
+        showToastMobile('⚠️ Tin nhắn quá dài!', 'warning');
         return;
     }
     
@@ -1477,9 +1465,33 @@ function sendChatMessage() {
     if (messageInput) messageInput.value = '';
     renderChatMessages();
     messageInput?.focus();
+    
+    // Bàn phím mobile tự động đóng
+    messageInput?.blur();
 }
 
-// Hiển thị tin nhắn
+// Các hàm còn lại giữ nguyên...
+function getRemainingTime() {
+    if (!lockExpiryTime) return 'không xác định';
+    const remaining = lockExpiryTime - Date.now();
+    if (remaining <= 0) return '0 ngày';
+    const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((remaining % (86400000)) / (1000 * 60 * 60));
+    if (days > 0) return `${days} ngày ${hours} giờ`;
+    if (hours > 0) return `${hours} giờ`;
+    return `dưới 1 giờ`;
+}
+
+function updateUserName(newName) {
+    if (newName.length > 30) newName = newName.substring(0, 30);
+    currentUserName = newName;
+    window.chatAPI.setCurrentUserName(newName);
+    isAdmin = window.chatAPI.isAdminUser(newName);
+    updateLockUI();
+    renderChatMessages();
+    showToastMobile(`✅ Đã đổi tên: ${newName}`, 'success');
+}
+
 function renderChatMessages() {
     const container = document.getElementById('chatMessages');
     if (!container) return;
@@ -1494,10 +1506,7 @@ function renderChatMessages() {
     }
     
     if (messages.length === 0) {
-        container.innerHTML = `<div style="text-align: center; color: #94a3b8; padding: 40px;">
-            <i class="fas fa-comment-dots" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
-            Chưa có tin nhắn nào. Hãy là người đầu tiên!
-        </div>`;
+        container.innerHTML = `<div style="text-align:center;color:#94a3b8;padding:40px;"><i class="fas fa-comment-dots" style="font-size:48px;margin-bottom:15px;display:block;"></i>Chưa có tin nhắn nào!</div>`;
         return;
     }
     
@@ -1508,17 +1517,12 @@ function renderChatMessages() {
         const isSystem = msg.userId === 'system';
         let displayName = msg.name;
         
-        // Nếu là tin nhắn của chính mình và tên đã thay đổi, hiển thị tên cũ → tên mới
         if (isOwnMessage && currentUserName !== msg.name) {
             displayName = `${msg.name} → ${currentUserName}`;
         }
         
         if (isSystem) {
-            return `<div style="text-align: center; margin: 8px 0;">
-                <span style="background: #e2e8f0; padding: 4px 12px; border-radius: 20px; font-size: 11px; color: #64748b;">
-                    <i class="fas fa-bell"></i> ${escapeHtml(msg.message)}
-                </span>
-            </div>`;
+            return `<div style="text-align:center;margin:8px 0;"><span style="background:#e2e8f0;padding:4px 12px;border-radius:20px;font-size:11px;color:#64748b;"><i class="fas fa-bell"></i> ${escapeHtml(msg.message)}</span></div>`;
         }
         
         return `
@@ -1552,24 +1556,24 @@ function deleteChatMessage(messageId) {
     if (success) {
         renderChatMessages();
     } else {
-        showToast('❌ Bạn không thể xóa tin nhắn của người khác!', 'error');
+        showToastMobile('❌ Không thể xóa tin nhắn người khác!', 'error');
     }
 }
 
 function clearAllChatMessages() {
     if (!window.chatAPI) return;
     if (!window.chatAPI.isAdminUser(currentUserName)) {
-        showToast('❌ Chỉ Admin mới có quyền xóa toàn bộ!', 'error');
+        showToastMobile('❌ Chỉ Admin mới xóa được!', 'error');
         return;
     }
-    if (confirm('⚠️ Xóa TOÀN BỘ tin nhắn? Không thể hoàn tác!')) {
+    if (confirm('⚠️ Xóa TOÀN BỘ tin nhắn?')) {
         window.chatAPI.clearAllChatMessages();
         renderChatMessages();
-        showToast('✅ Đã xóa toàn bộ tin nhắn!', 'success');
+        showToastMobile('✅ Đã xóa toàn bộ!', 'success');
     }
 }
 
-// Khởi tạo khi DOM ready
+// Khởi tạo
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         initChat();
@@ -1577,11 +1581,31 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const clearBtn = document.getElementById('clearAllChatBtn');
     if (clearBtn) {
-        clearBtn.addEventListener('click', clearAllChatMessages);
+        clearBtn.onclick = clearAllChatMessages;
+    }
+    
+    // Fix cho mobile: gửi tin nhắn bằng nút
+    const sendBtn = document.getElementById('sendChatBtn');
+    if (sendBtn) {
+        sendBtn.onclick = function(e) {
+            e.preventDefault();
+            sendChatMessage();
+        };
+    }
+    
+    // Fix cho mobile: enter trên bàn phím
+    const messageInput = document.getElementById('chatMessage');
+    if (messageInput) {
+        messageInput.onkeypress = function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        };
     }
 });
 
-// Dọn dẹp interval
+// Dọn dẹp
 window.addEventListener('beforeunload', function() {
     if (window.chatRefreshInterval) {
         clearInterval(window.chatRefreshInterval);
