@@ -1,101 +1,46 @@
-// ==================== CHAT DATABASE DÙNG DISCORD WEBHOOK ====================
-
-// ⚠️ THAY THÔNG TIN NÀY BẰNG CỦA BẠN ⚠️
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1502365239365206156/1iah3nqF_s1abCZDmegB1FmTqNLxboi7P3WMXYPPhVeZjZbbrRQEbYj952ZzeFHE12VJ";
-const DISCORD_CHANNEL_ID = "1502365203365625896";
-const DISCORD_BOT_TOKEN = ""; // Để trống nếu không có bot, chỉ đọc được tin nhắn gần đây
+// ==================== CHAT DATABASE - ĐỒNG BỘ GIỮA CÁC THIẾT BỊ ====================
 
 let chatMessages = [];
-let lastMessageId = null;
+let lastSyncTime = 0;
+let syncInterval = null;
 
-// Tải tin nhắn từ Discord
-async function loadChatData() {
-    // Thử lấy từ localStorage trước (cache)
-    const cached = localStorage.getItem('discord_chat_cache');
-    if (cached) {
+// Tải tin nhắn từ localStorage
+function loadChatData() {
+    const saved = localStorage.getItem('hotrohoctap_chat_global');
+    if (saved) {
         try {
-            chatMessages = JSON.parse(cached);
-            if (chatMessages.length > 0) {
-                lastMessageId = chatMessages[chatMessages.length - 1]?.id;
-            }
-        } catch(e) {}
-    }
-    
-    // Lấy tin nhắn mới từ Discord
-    await fetchMessagesFromDiscord();
-}
-
-// Lấy tin nhắn từ Discord Channel (không cần bot, dùng webhook)
-async function fetchMessagesFromDiscord() {
-    try {
-        // Discord API yêu cầu Authorization, cách đơn giản là dùng webhook để gửi và lưu
-        // Vì Discord không cho đọc tin nhắn qua webhook, ta sẽ dùng localStorage + sync qua webhook
-        
-        // Giải pháp: Khi gửi tin nhắn, gửi cả vào webhook và lưu local
-        // Khi load, đọc từ localStorage và sync từ các thiết bị khác qua webhook
-        
-        console.log('🔄 Đồng bộ chat từ cache...');
-        return chatMessages;
-    } catch (error) {
-        console.error('Lỗi đọc Discord:', error);
-        return chatMessages;
+            chatMessages = JSON.parse(saved);
+            console.log('📥 Đã tải', chatMessages.length, 'tin nhắn từ bộ nhớ');
+        } catch(e) {
+            console.error('Lỗi đọc chat:', e);
+            initSampleMessages();
+        }
+    } else {
+        initSampleMessages();
     }
 }
 
-// Gửi tin nhắn lên Discord Webhook
-async function sendToDiscord(name, message) {
-    if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.includes('ID_CUA_BAN')) {
-        console.warn('⚠️ Chưa cấu hình Discord Webhook!');
-        return false;
-    }
-    
-    try {
-        const embed = {
-            username: "💬 Chat Công Cộng",
-            avatar_url: "https://cdn-icons-png.flaticon.com/512/5337/5337921.png",
-            content: `**${name}:** ${message}`,
-            embeds: [{
-                color: 0x5865F2,
-                fields: [
-                    { name: "👤 Người gửi", value: name, inline: true },
-                    { name: "💬 Nội dung", value: message, inline: false },
-                    { name: "⏰ Thời gian", value: new Date().toLocaleString('vi-VN'), inline: true }
-                ],
-                footer: { text: "HoTroHocTap Chat" }
-            }]
-        };
-        
-        await fetch(DISCORD_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(embed)
-        });
-        
-        // Lưu tin nhắn vào localStorage để cache
-        const newMessage = {
-            id: Date.now(),
-            name: name,
-            message: message,
-            time: new Date().toISOString(),
-            userId: getCurrentUserId()
-        };
-        
-        chatMessages.unshift(newMessage);
-        if (chatMessages.length > 200) chatMessages = chatMessages.slice(0, 200);
-        localStorage.setItem('discord_chat_cache', JSON.stringify(chatMessages));
-        
-        return true;
-    } catch (error) {
-        console.error('Lỗi gửi Discord:', error);
-        return false;
-    }
+// Khởi tạo tin nhắn mẫu
+function initSampleMessages() {
+    chatMessages = [
+        { id: 1, name: "Hệ thống", message: "🎉 Chào mừng bạn đến với Chat công cộng!", time: new Date().toISOString(), userId: "system" },
+        { id: 2, name: "Admin", message: "💬 Hãy tương tác văn minh, lịch sự nhé!", time: new Date(Date.now() - 3600000).toISOString(), userId: "admin" }
+    ];
+    saveChatData();
 }
 
-// Lấy ID người dùng
+// Lưu tin nhắn và broadcast sang các thiết bị khác
+function saveChatData() {
+    localStorage.setItem('hotrohoctap_chat_global', JSON.stringify(chatMessages));
+    // Tạo tín hiệu để các tab/thiết bị khác biết có cập nhật
+    localStorage.setItem('chat_update_signal', Date.now().toString());
+}
+
+// Lấy ID người dùng (duy nhất cho mỗi thiết bị)
 function getCurrentUserId() {
     let userId = localStorage.getItem('chat_user_id');
     if (!userId) {
-        userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        userId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
         localStorage.setItem('chat_user_id', userId);
     }
     return userId;
@@ -103,15 +48,15 @@ function getCurrentUserId() {
 
 // Tạo tên ngẫu nhiên
 function generateRandomName() {
-    const prefixes = ['🐱', '🐶', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵'];
-    const names = ['Học Sinh', 'Sinh Viên', 'Học Tập', 'Chăm Chỉ', 'Thông Minh', 'Sáng Tạo', 'Năng Động', 'Vui Vẻ'];
+    const prefixes = ['🐱', '🐶', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐙', '🦄', '🐌', '🐛', '🦋'];
+    const names = ['Học Sinh', 'Sinh Viên', 'Học Tập', 'Chăm Chỉ', 'Thông Minh', 'Sáng Tạo', 'Năng Động', 'Vui Vẻ', 'Thành Công', 'Tích Cực'];
     const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
     const randomName = names[Math.floor(Math.random() * names.length)];
     const randomNum = Math.floor(Math.random() * 1000);
     return `${randomPrefix} ${randomName}${randomNum}`;
 }
 
-// Lấy tên người dùng
+// Lấy tên người dùng hiện tại
 function getCurrentUserName() {
     let userName = localStorage.getItem('chat_user_name');
     if (!userName) {
@@ -121,10 +66,12 @@ function getCurrentUserName() {
     return userName;
 }
 
-// Cập nhật tên
+// Cập nhật tên người dùng
 function setCurrentUserName(name) {
     if (name && name.trim()) {
         localStorage.setItem('chat_user_name', name.trim());
+        // Broadcast tên mới
+        localStorage.setItem('chat_name_update', Date.now().toString());
     }
 }
 
@@ -135,84 +82,116 @@ function randomizeUserName() {
     return newName;
 }
 
-// Thêm tin nhắn (gửi lên Discord)
-async function addChatMessage(name, message) {
-    const success = await sendToDiscord(name, message);
+// Thêm tin nhắn mới (đồng bộ)
+function addChatMessage(name, message) {
+    const userId = getCurrentUserId();
+    const newId = Date.now();
+    const newMessage = {
+        id: newId,
+        name: name,
+        message: message,
+        time: new Date().toISOString(),
+        userId: userId
+    };
+    chatMessages.push(newMessage);
     
-    if (success) {
-        // Kích hoạt refresh cho tất cả client
-        triggerRefresh();
+    // Giới hạn 500 tin nhắn
+    if (chatMessages.length > 500) {
+        chatMessages = chatMessages.slice(-500);
     }
     
-    return success;
+    saveChatData();
+    console.log('📤 Đã gửi tin nhắn:', name, '-', message);
+    return true;
 }
 
-// Kích hoạt refresh cho các client khác
-function triggerRefresh() {
-    // Lưu timestamp để các client khác biết cần refresh
-    localStorage.setItem('chat_last_update', Date.now().toString());
-}
-
+// Lấy tất cả tin nhắn (sắp xếp theo thời gian)
 function getAllChatMessages() {
-    // Sắp xếp tin nhắn cũ lên trên, mới xuống dưới
-    return [...chatMessages].sort((a, b) => a.id - b.id);
+    return [...chatMessages].sort((a, b) => new Date(a.time) - new Date(b.time));
 }
 
-// Xóa tin nhắn (chỉ ảo, không xóa trên Discord)
+// Xóa tin nhắn (chỉ xóa được của mình hoặc admin)
 function deleteChatMessage(messageId, isAdmin = false) {
-    if (!isAdmin) return false;
-    
     const index = chatMessages.findIndex(m => m.id == messageId);
-    if (index !== -1) {
+    if (index === -1) return false;
+    
+    const message = chatMessages[index];
+    const currentUserId = getCurrentUserId();
+    
+    if (isAdmin || message.userId === currentUserId || message.userId === 'system') {
         chatMessages.splice(index, 1);
-        localStorage.setItem('discord_chat_cache', JSON.stringify(chatMessages));
+        saveChatData();
         return true;
     }
     return false;
 }
 
-// Xóa tất cả
+// Xóa tất cả tin nhắn
 function clearAllChatMessages() {
-    chatMessages = [];
-    localStorage.setItem('discord_chat_cache', JSON.stringify(chatMessages));
+    chatMessages = chatMessages.filter(m => m.userId === 'system');
+    saveChatData();
 }
 
-// Kiểm tra admin
+// Kiểm tra admin (dựa trên tên)
 function isAdminUser(userName) {
-    const adminNames = ['Admin', 'admin', 'Quản trị', 'F9', 'Trịnh Văn Tú', 'Trinh Van Tu', 'ADMIN'];
+    const adminNames = ['Admin', 'admin', 'Quản trị', 'F9', 'Trịnh Văn Tú', 'Trinh Van Tu', 'ADMIN', 'Admin F9'];
     return adminNames.includes(userName);
 }
 
 // Lắng nghe thay đổi từ các thiết bị khác
 function startSyncListener(callback) {
+    // Lắng nghe sự kiện storage (khi localStorage thay đổi từ tab/thiết bị khác)
     window.addEventListener('storage', (e) => {
-        if (e.key === 'chat_last_update' || e.key === 'discord_chat_cache') {
-            const cached = localStorage.getItem('discord_chat_cache');
-            if (cached) {
+        if (e.key === 'hotrohoctap_chat_global') {
+            // Có tin nhắn mới từ thiết bị khác
+            const newData = e.newValue;
+            if (newData) {
                 try {
-                    chatMessages = JSON.parse(cached);
-                    if (callback) callback();
+                    const newMessages = JSON.parse(newData);
+                    if (JSON.stringify(newMessages) !== JSON.stringify(chatMessages)) {
+                        chatMessages = newMessages;
+                        console.log('🔄 Đã đồng bộ tin nhắn từ thiết bị khác');
+                        if (callback) callback();
+                    }
                 } catch(e) {}
+            }
+        }
+        if (e.key === 'chat_name_update') {
+            // Tên đã thay đổi ở thiết bị khác
+            const newName = localStorage.getItem('chat_user_name');
+            if (newName && callback) {
+                console.log('🔄 Tên đã thay đổi ở thiết bị khác:', newName);
+                callback('name_update');
             }
         }
     });
     
-    // Refresh mỗi 5 giây
-    setInterval(() => {
-        const cached = localStorage.getItem('discord_chat_cache');
-        if (cached) {
+    // Tự động đồng bộ mỗi 5 giây (phòng trường hợp sự kiện storage không hoạt động)
+    if (syncInterval) clearInterval(syncInterval);
+    syncInterval = setInterval(() => {
+        const saved = localStorage.getItem('hotrohoctap_chat_global');
+        if (saved) {
             try {
-                const newMessages = JSON.parse(cached);
+                const newMessages = JSON.parse(saved);
                 if (JSON.stringify(newMessages) !== JSON.stringify(chatMessages)) {
                     chatMessages = newMessages;
+                    console.log('🔄 Đồng bộ định kỳ:', chatMessages.length, 'tin nhắn');
                     if (callback) callback();
                 }
             } catch(e) {}
         }
-    }, 5000);
+    }, 3000);
 }
 
-// Export
+// Dừng đồng bộ
+function stopSyncListener() {
+    if (syncInterval) {
+        clearInterval(syncInterval);
+        syncInterval = null;
+    }
+}
+
+// Xuất API
 window.chatAPI = {
     loadChatData,
     getCurrentUserId,
@@ -225,7 +204,8 @@ window.chatAPI = {
     clearAllChatMessages,
     getAllChatMessages,
     isAdminUser,
-    startSyncListener
+    startSyncListener,
+    stopSyncListener
 };
 
-console.log('✅ Chat database dùng Discord Webhook đã sẵn sàng');
+console.log('✅ Chat database đã sẵn sàng (đồng bộ đa thiết bị)');
