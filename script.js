@@ -1250,7 +1250,12 @@ function initChat() {
     
     // Hiển thị tin nhắn
     renderChatMessages();
-    
+    if (window.chatAPI) {
+        window.chatAPI.startSyncListener(() => {
+            renderChatMessages(); // Tự động cập nhật
+            updateLockUI();
+        });
+    }
     // Tự động cập nhật mỗi 3 giây
     if (window.chatRefreshInterval) clearInterval(window.chatRefreshInterval);
     window.chatRefreshInterval = setInterval(() => {
@@ -1526,6 +1531,15 @@ function clearAllChatMessages() {
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         initChat();
+        
+        // Bắt đầu lắng nghe tin nhắn mới
+        if (window.chatAPI) {
+            window.chatAPI.startSyncListener(() => {
+                // Tự động cập nhật giao diện khi có tin nhắn mới
+                renderChatMessages();
+                console.log('🔄 Tự động cập nhật tin nhắn mới');
+            });
+        }
     }, 500);
     
     const clearBtn = document.getElementById('clearAllChatBtn');

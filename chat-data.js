@@ -134,10 +134,12 @@ function isAdminUser(userName) {
 
 // Lắng nghe tin nhắn mới (polling mỗi 2 giây)
 function startSyncListener(callback) {
-    if (pollingInterval) clearInterval(pollingInterval);
-    pollingInterval = setInterval(async () => {
-        const newMessages = await fetchMessagesFromSheet();
-        if (callback && newMessages) callback();
+    setInterval(async () => {
+        const oldCount = chatMessages.length;
+        await fetchMessagesFromServer();
+        if (chatMessages.length !== oldCount && callback) {
+            callback(); // Gọi hàm làm mới giao diện
+        }
     }, 2000);
 }
 
