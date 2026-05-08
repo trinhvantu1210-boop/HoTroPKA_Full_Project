@@ -10,20 +10,19 @@ async function loadChatData() {
     await fetchMessagesFromSheet();
 }
 
-// Lấy tin nhắn từ Google Sheet
-async function fetchMessagesFromSheet() {
+async function fetchMessagesFromServer() {
     try {
-        const response = await fetch(GOOGLE_SHEET_URL);
-        const data = await response.json();
-        if (Array.isArray(data)) {
-            chatMessages = data;
-            console.log('📥 Đã tải', chatMessages.length, 'tin nhắn từ Google Sheet');
-            // Lưu cache
+        const response = await fetch(GOOGLE_SHEET_API_URL);
+        const messages = await response.json();
+        if (Array.isArray(messages)) {
+            // Lọc bỏ tin nhắn rỗng
+            chatMessages = messages.filter(msg => msg && msg.message && msg.message.trim() !== '');
+            // Lưu vào bộ nhớ tạm
             localStorage.setItem('chat_cache', JSON.stringify(chatMessages));
+            console.log('📥 Đã tải', chatMessages.length, 'tin nhắn từ server');
         }
     } catch (error) {
-        console.error('Lỗi đọc Google Sheet:', error);
-        // Fallback sang cache
+        console.error('Lỗi đọc tin nhắn từ server:', error);
         const cached = localStorage.getItem('chat_cache');
         if (cached) chatMessages = JSON.parse(cached);
     }

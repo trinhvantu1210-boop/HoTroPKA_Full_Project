@@ -1417,7 +1417,17 @@ function renderChatMessages() {
     if (!container) return;
     
     let messages = window.chatAPI ? window.chatAPI.getAllChatMessages() : [];
-    messages = [...messages].sort((a, b) => new Date(a.time) - new Date(b.time));
+    
+    // Kiểm tra và Fix lỗi dữ liệu từ Google Sheet
+    messages = messages.filter(msg => msg && msg.name && msg.message);
+    
+    // Sắp xếp theo thời gian
+    messages = [...messages].sort((a, b) => {
+        let timeA = a.time ? new Date(a.time).getTime() : 0;
+        let timeB = b.time ? new Date(b.time).getTime() : 0;
+        return timeA - timeB;
+    });
+    
     const currentUser = window.chatAPI ? window.chatAPI.getCurrentUserId() : '';
     
     const messageCountSpan = document.getElementById('messageCount');
@@ -1426,23 +1436,40 @@ function renderChatMessages() {
     }
     
     if (messages.length === 0) {
-        container.innerHTML = `<div style="text-align:center;color:#94a3b8;padding:40px;">Chưa có tin nhắn nào!</div>`;
+        container.innerHTML = `<div style="text-align:center;color:#94a3b8;padding:40px;">💬 Chưa có tin nhắn nào. Hãy là người đầu tiên!</div>`;
         return;
     }
     
     container.innerHTML = messages.map(msg => {
         const isOwnMessage = msg.userId === currentUser;
         const canDelete = isOwnMessage;
-        const time = new Date(msg.time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-        const isSystem = msg.userId === 'system';
-        let displayName = msg.name;
         
-        if (isOwnMessage && currentUserName !== msg.name) {
+        // Xử lý thời gian an toàn
+        let timeStr = '';
+        try {
+            const date = new Date(msg.time);
+            if (!isNaN(date.getTime())) {
+                timeStr = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            } else {
+                timeStr = 'vừa xong';
+            }
+        } catch(e) {
+            timeStr = 'vừa xong';
+        }
+        
+        const isSystem = msg.userId === 'system' || msg.name === 'Hệ thống';
+        let displayName = msg.name || 'Khách';
+        
+        if (isOwnMessage && currentUserName && currentUserName !== msg.name) {
             displayName = `${msg.name} → ${currentUserName}`;
         }
         
         if (isSystem) {
-            return `<div style="text-align:center;margin:8px 0;"><span style="background:#e2e8f0;padding:4px 12px;border-radius:20px;font-size:11px;color:#64748b;">🔔 ${escapeHtml(msg.message)}</span></div>`;
+            return `<div style="text-align:center;margin:8px 0;">
+                <span style="background:#e2e8f0;padding:4px 12px;border-radius:20px;font-size:11px;color:#64748b;">
+                    🔔 ${escapeHtml(msg.message || '')}
+                </span>
+            </div>`;
         }
         
         return `
@@ -1452,8 +1479,8 @@ function renderChatMessages() {
                     <div class="chat-name">
                         <span class="chat-name-text">${escapeHtml(displayName)}</span>
                     </div>
-                    <div>${escapeHtml(msg.message)}</div>
-                    <div class="chat-time">${time}</div>
+                    <div>${escapeHtml(msg.message || '')}</div>
+                    <div class="chat-time">${timeStr}</div>
                 </div>
             </div>
         `;
