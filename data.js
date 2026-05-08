@@ -5,23 +5,471 @@ const universityDatabase = {
     // ========== KHU VỰC MIỀN BẮC ==========
     // Đại học Bách khoa Hà Nội
     "BKU": {
-        name: "Đại học Bách khoa Hà Nội",
-        region: "mb",
-        location: "Hà Nội",
-        website: "https://hust.edu.vn",
-        admissionYear: 2025,
-        subjects: {
-            "IT1": { name: "Khoa học máy tính (IT1)", code: "7480101", combo: "A00", target: 29.19, type: "THPT" },
-            "IT2": { name: "Kỹ thuật máy tính (IT2)", code: "7480201", combo: "A00", target: 28.83, type: "THPT" },
-            "IT-E10": { name: "KH dữ liệu và Trí tuệ nhân tạo", code: "7480105", combo: "A00", target: 29.39, type: "THPT" },
-            "EE1": { name: "Kỹ thuật điện", code: "7520201", combo: "A00", target: 27.50, type: "THPT" },
-            "EE2": { name: "KT Điều khiển - Tự động hóa", code: "7520216", combo: "A00", target: 28.48, type: "THPT" },
-            "ME1": { name: "Kỹ thuật cơ khí", code: "7520114", combo: "A00", target: 27.20, type: "THPT" },
-            "ME2": { name: "Cơ điện tử", code: "7520114", combo: "A00", target: 26.80, type: "THPT" },
-            "CE1": { name: "Kỹ thuật xây dựng", code: "7580201", combo: "A00", target: 25.50, type: "THPT" },
-            "MT1": { name: "Kỹ thuật môi trường", code: "7520320", combo: "B00", target: 24.80, type: "THPT" }
+    name: "Đại học Bách khoa Hà Nội",
+    region: "mb",
+    location: "Hà Nội",
+    website: "https://hust.edu.vn",
+    admissionYear: 2025,
+
+    subjects: {
+
+        // ===== CÔNG NGHỆ SINH HỌC - THỰC PHẨM =====
+        "BF-E12": {
+            name: "Kỹ thuật Thực phẩm (CT tiên tiến)",
+            code: "7540101",
+            combo: "A00;B00;D07;B03;C01;C02;X02",
+            target: 21.00,
+            type: "THPT"
+        },
+
+        "BF-E19": {
+            name: "Kỹ thuật sinh học (CT tiên tiến)",
+            code: "7420201",
+            combo: "A00;B00;D07;B03;C01;C02;X02",
+            target: 20.00,
+            type: "THPT"
+        },
+
+        "BF1": {
+            name: "Kỹ thuật Sinh học",
+            code: "7420201",
+            combo: "A00;B00;D07;B03;C01;C02;X02",
+            target: 23.02,
+            type: "THPT"
+        },
+
+        "BF2": {
+            name: "Kỹ thuật Thực phẩm",
+            code: "7540101",
+            combo: "A00;B00;D07;B03;C01;C02;X02",
+            target: 23.38,
+            type: "THPT"
+        },
+
+        // ===== HÓA =====
+        "CH-E11": {
+            name: "Kỹ thuật Hóa dược (CT tiên tiến)",
+            code: "7520301",
+            combo: "A00;B00;D07;B03;C01;C02;X02",
+            target: 21.38,
+            type: "THPT"
+        },
+
+        "CH1": {
+            name: "Kỹ thuật Hoá học",
+            code: "7520301",
+            combo: "A00;B00;D07;B03;C01;C02;X02",
+            target: 24.05,
+            type: "THPT"
+        },
+
+        "CH2": {
+            name: "Hoá học",
+            code: "7440112",
+            combo: "A00;B00;D07;B03;C01;C02;X02",
+            target: 23.19,
+            type: "THPT"
+        },
+
+        // ===== GIÁO DỤC =====
+        "ED2": {
+            name: "Công nghệ giáo dục",
+            code: "7140114",
+            combo: "D01;A00;A01;B03;C01;C02;X02",
+            target: 23.80,
+            type: "THPT"
+        },
+
+        "ED3": {
+            name: "Quản lý giáo dục",
+            code: "7140114",
+            combo: "D01;A00;A01;B03;C01;C02;X02",
+            target: 23.70,
+            type: "THPT"
+        },
+
+        // ===== ĐIỆN - ĐIỆN TỬ =====
+        "EE-E18": {
+            name: "Hệ thống điện và năng lượng tái tạo (CT tiên tiến)",
+            code: "7520201",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 26.56,
+            type: "THPT"
+        },
+
+        "EE-E8": {
+            name: "Kỹ thuật Điều khiển - Tự động hoá (CT tiên tiến)",
+            code: "7520216",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 28.12,
+            type: "THPT"
+        },
+
+        "EE-EP": {
+            name: "Tin học công nghiệp và Tự động hóa (PFIEV)",
+            code: "7520216",
+            combo: "A00;A01;D29;B03;C01;C02;X02",
+            target: 27.27,
+            type: "THPT"
+        },
+
+        "EE1": {
+            name: "Kỹ thuật Điện",
+            code: "7520201",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 27.55,
+            type: "THPT"
+        },
+
+        "EE2": {
+            name: "Kỹ thuật Điều khiển - Tự động hoá",
+            code: "7520216",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 28.48,
+            type: "THPT"
+        },
+
+        // ===== KINH TẾ =====
+        "EM-E13": {
+            name: "Phân tích kinh doanh (CT tiên tiến)",
+            code: "7340122",
+            combo: "A01;B03;C01;C02;D07;X02;D01",
+            target: 23.56,
+            type: "THPT"
+        },
+
+        "EM-E14": {
+            name: "Logistics và Quản lý chuỗi cung ứng (CT tiên tiến)",
+            code: "7510605",
+            combo: "D01;A01;B03;C01;C02;D07;X02",
+            target: 24.21,
+            type: "THPT"
+        },
+
+        "EM1": {
+            name: "Quản lý năng lượng",
+            code: "7510601",
+            combo: "D01;A00;A01;B03;C01;C02;X02",
+            target: 24.20,
+            type: "THPT"
+        },
+
+        "EM2": {
+            name: "Quản lý công nghiệp",
+            code: "7510601",
+            combo: "D01;A00;A01;B03;C01;C02;X02",
+            target: 24.40,
+            type: "THPT"
+        },
+
+        "EM3": {
+            name: "Quản trị kinh doanh",
+            code: "7340101",
+            combo: "D01;A00;A01;B03;C01;C02;X02",
+            target: 24.80,
+            type: "THPT"
+        },
+
+        "EM4": {
+            name: "Kế toán",
+            code: "7340301",
+            combo: "D01;A00;A01;B03;C01;C02;X02",
+            target: 24.63,
+            type: "THPT"
+        },
+
+        "EM5": {
+            name: "Tài chính - Ngân hàng",
+            code: "7340201",
+            combo: "D01;A00;A01;B03;C01;C02;X02",
+            target: 24.80,
+            type: "THPT"
+        },
+
+        // ===== ĐIỆN TỬ VIỄN THÔNG =====
+        "ET-E16": {
+            name: "Truyền thông số và Kỹ thuật đa phương tiện",
+            code: "7520207",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 26.62,
+            type: "THPT"
+        },
+
+        "ET-E4": {
+            name: "Kỹ thuật Điện tử - Viễn thông (CT tiên tiến)",
+            code: "7520207",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 27.55,
+            type: "THPT"
+        },
+
+        "ET-E5": {
+            name: "Kỹ thuật Y sinh (CT tiên tiến)",
+            code: "7520212",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 25.58,
+            type: "THPT"
+        },
+
+        "ET-E9": {
+            name: "Hệ thống nhúng thông minh và IoT",
+            code: "7520207",
+            combo: "A00;A01;D28;B03;C01;C02;X02",
+            target: 27.85,
+            type: "THPT"
+        },
+
+        "ET1": {
+            name: "Kỹ thuật Điện tử - Viễn thông",
+            code: "7520207",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 28.07,
+            type: "THPT"
+        },
+
+        "ET2": {
+            name: "Kỹ thuật Y sinh",
+            code: "7520212",
+            combo: "A00;A01;B00;B03;C01;C02;X02",
+            target: 26.32,
+            type: "THPT"
+        },
+
+        // ===== CNTT =====
+        "IT-E10": {
+            name: "Khoa học dữ liệu và Trí tuệ nhân tạo",
+            code: "7480108",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 29.39,
+            type: "THPT"
+        },
+
+        "IT-E15": {
+            name: "An toàn không gian số - Cyber Security",
+            code: "7480202",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 28.69,
+            type: "THPT"
+        },
+
+        "IT-E6": {
+            name: "CNTT Việt - Nhật",
+            code: "7480201",
+            combo: "A00;A01;D28;B03;C01;C02;X02",
+            target: 27.97,
+            type: "THPT"
+        },
+
+        "IT-E7": {
+            name: "CNTT Global ICT",
+            code: "7480201",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 28.66,
+            type: "THPT"
+        },
+
+        "IT-EP": {
+            name: "CNTT Việt - Pháp",
+            code: "7480201",
+            combo: "A00;A01;D29;B03;C01;C02;X02",
+            target: 27.83,
+            type: "THPT"
+        },
+
+        "IT1": {
+            name: "CNTT: Khoa học Máy tính",
+            code: "7480101",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 29.19,
+            type: "THPT"
+        },
+
+        "IT2": {
+            name: "CNTT: Kỹ thuật Máy tính",
+            code: "7480201",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 28.83,
+            type: "THPT"
+        },
+
+        // ===== CƠ KHÍ =====
+        "ME-E1": {
+            name: "Kỹ thuật Cơ điện tử (CT tiên tiến)",
+            code: "7520114",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 26.74,
+            type: "THPT"
+        },
+
+        "ME1": {
+            name: "Kỹ thuật Cơ điện tử",
+            code: "7520114",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 27.90,
+            type: "THPT"
+        },
+
+        "ME2": {
+            name: "Kỹ thuật Cơ khí",
+            code: "7520103",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 26.62,
+            type: "THPT"
+        },
+
+        // ===== TOÁN =====
+        "MI1": {
+            name: "Toán - Tin",
+            code: "7460117",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 27.80,
+            type: "THPT"
+        },
+
+        "MI2": {
+            name: "Hệ thống thông tin quản lý",
+            code: "7340405",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 27.72,
+            type: "THPT"
+        },
+
+        // ===== VẬT LIỆU =====
+        "MS1": {
+            name: "Kỹ thuật Vật liệu",
+            code: "7520309",
+            combo: "A00;A01;D07;B03;C01;C02;X02",
+            target: 25.39,
+            type: "THPT"
+        },
+
+        "MS2": {
+            name: "Kỹ thuật Vi điện tử và Công nghệ nano",
+            code: "7520207",
+            combo: "A00;A01;D07;B03;C01;C02;X02",
+            target: 28.25,
+            type: "THPT"
+        },
+
+        // ===== VẬT LÝ =====
+        "PH1": {
+            name: "Vật lý kỹ thuật",
+            code: "7520401",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 26.41,
+            type: "THPT"
+        },
+
+        "PH2": {
+            name: "Kỹ thuật hạt nhân",
+            code: "7520402",
+            combo: "A00;A01;A02;B03;C01;C02;X02",
+            target: 25.07,
+            type: "THPT"
+        },
+
+        "PH3": {
+            name: "Vật lý Y khoa",
+            code: "7520403",
+            combo: "A00;A01;A02;B03;C01;C02;X02",
+            target: 25.20,
+            type: "THPT"
+        },
+
+        // ===== Ô TÔ =====
+        "TE1": {
+            name: "Kỹ thuật Ô tô",
+            code: "7520130",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 27.03,
+            type: "THPT"
+        },
+
+        "TE2": {
+            name: "Kỹ thuật Cơ khí động lực",
+            code: "7520116",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 26.25,
+            type: "THPT"
+        },
+
+        "TE3": {
+            name: "Kỹ thuật Hàng không",
+            code: "7520120",
+            combo: "A00;A01;B03;C01;C02;X02",
+            target: 26.60,
+            type: "THPT"
+        },
+
+        // ===== NGOẠI NGỮ =====
+        "FL1": {
+            name: "Tiếng Anh KHKT và Công nghệ",
+            code: "7220201",
+            combo: "D01;B03;C01;C02;X02",
+            target: 24.80,
+            type: "THPT"
+        },
+
+        "FL2": {
+            name: "Tiếng Anh chuyên nghiệp quốc tế",
+            code: "7220201",
+            combo: "D01;B03;C01;C02;X02",
+            target: 24.80,
+            type: "THPT"
+        },
+
+        "FL3": {
+            name: "Tiếng Trung KHKT và Công nghệ",
+            code: "7220204",
+            combo: "D01;D04;B03;C01;C02;X02",
+            target: 25.36,
+            type: "THPT"
+        },
+
+        // ===== MÔI TRƯỜNG =====
+        "EV1": {
+            name: "Kỹ thuật Môi trường",
+            code: "7520320",
+            combo: "A00;B00;D07;B03;C01;C02;X02",
+            target: 22.22,
+            type: "THPT"
+        },
+
+        "EV2": {
+            name: "Quản lý Tài nguyên và Môi trường",
+            code: "7850101",
+            combo: "A00;B00;D07;B03;C01;C02;X02",
+            target: 21.53,
+            type: "THPT"
+        },
+
+        // ===== TROY =====
+        "TROY-BA": {
+            name: "Quản trị kinh doanh - ĐH Troy (Hoa Kỳ)",
+            code: "7340101",
+            combo: "D01;A00;A01;B03;C01;C02;X02",
+            target: 19.50,
+            type: "THPT"
+        },
+
+        "TROY-IT": {
+            name: "Khoa học máy tính - ĐH Troy (Hoa Kỳ)",
+            code: "7480101",
+            combo: "D01;A00;A01;B03;C01;C02;X02",
+            target: 21.80,
+            type: "THPT"
+        },
+
+        // ===== DỆT MAY =====
+        "TX1": {
+            name: "Công nghệ Dệt - May",
+            code: "7540204",
+            combo: "A00;A01;D07;B03;C01;C02;X02",
+            target: 22.48,
+            type: "THPT"
         }
-    },
+    }
+},
     
     // Đại học Kinh tế Quốc dân
     "NEU": {

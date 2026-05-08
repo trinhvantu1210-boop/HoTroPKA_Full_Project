@@ -61,6 +61,7 @@
         <div class="nav-group">
             <div class="nav-group-title">HỖ TRỢ</div>
             <nav class="nav-menu">
+                <a class="nav-item" data-tab="tab-chat"><span class="nav-icon"><i class="fas fa-comments"></i></span><span>Chat công cộng</span></a>
                 <a class="nav-item" data-tab="tab-huongdan"><span class="nav-icon"><i class="fas fa-question-circle"></i></span><span>Hướng dẫn sử dụng</span></a>
                 <a class="nav-item" data-tab="tab-gopy"><span class="nav-icon"><i class="fas fa-comment-dots"></i></span><span>Góp ý & báo lỗi</span></a>
                 <a class="nav-item" data-tab="tab-vechungtoi"><span class="nav-icon"><i class="fas fa-building"></i></span><span>Về chúng tôi</span></a>
@@ -92,14 +93,15 @@
                     <div class="feature-card" data-tab-link="tab-hocphan"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><h3>Tính điểm học phần</h3><p>Nhập điểm thành phần, tính tổng kết và xếp loại</p></div>
                     <div class="feature-card" data-tab-link="tab-quamon"><div class="feature-icon"><i class="fas fa-pen-fancy"></i></div><h3>Tính điểm qua môn</h3><p>Dự đoán điểm cần đạt để qua môn</p></div>
                     <div class="feature-card" data-tab-link="tab-quydoi"><div class="feature-icon"><i class="fas fa-exchange-alt"></i></div><h3>Quy đổi chứng chỉ</h3><p>TOEIC, IELTS sang thang điểm</p></div>
-                    <div class="feature-card" data-tab-link="tab-dudoan"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><h3>Dự đoán đỗ Đại học</h3><p>Check cơ hội đỗ các trường top</p></div>
+                    <div class="feature-card" data-tab-link="tab-dudoan"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><h3>Tính Điểm Xét Tuyển</h3><p>Check cơ hội đỗ các trường top</p></div>
                 </div>
             </div>
 
             <div class="team-section">
+                
                 <h2 class="section-title-center">Đội ngũ phát triển</h2>
                 <div class="team-grid">
-                    <div class="team-card"><img src="https://scontent.fhan15-1.fna.fbcdn.net/v/t39.30808-1/651175714_907260288891613_7156699205291040253_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=102&ccb=1-7&_nc_sid=e99d92&_nc_ohc=cDFGYHRo7zMQ7kNvwFWe05y&_nc_oc=AdoKJVDtwB7TUMMZxAQOSkPeuN4TIeoB0mQxudZhAWpXb3w4FaXOjX_Zp3VVHfDMgrIcojG8fZqZGlQ_qDa5zwjU&_nc_zt=24&_nc_ht=scontent.fhan15-1.fna&_nc_gid=YRfQVCq3AUZjl-p7z-kW3Q&_nc_ss=7b2a8&oh=00_Af7ePcZ5vEPfOSiX1-lakQ_IbRtu5iEgorM0egfWOSjyFQ&oe=69FCE186" class="team-avatar-img"><h3>Nguyễn Trung Kiên</h3><p class="team-role">Product & Content Ideation</p></div>
+                    <div class="team-card"><img src="https://cdn.phototourl.com/free/2026-05-08-32186ae2-3be8-40fe-b525-d224156a3a72.jpg" class="team-avatar-img"><h3>Nguyễn Trung Kiên</h3><p class="team-role">Product & Content Ideation</p></div>
                     <div class="team-card"><img src="https://cdn.phototourl.com/free/2026-05-07-7763f5a0-f305-4ffc-bb71-c54b46a87729.jpg" class="team-avatar-img"><h3>Trịnh Văn Tú</h3><p class="team-role">Founder & Full-stack Developer</p></div>
                     <div class="team-card"><img src="https://cdn.phototourl.com/free/2026-05-07-f47d9032-4646-4d29-932b-0c3a649940a7.jpg" class="team-avatar-img"><h3>Bùi Thị Trà My</h3><p class="team-role">Marketing & Đồng Sáng Lập</p></div>
                 </div>
@@ -128,7 +130,7 @@
                 <button class="btn-reset" id="resetBtn"><i class="fas fa-undo-alt"></i> Đặt lại</button>
                 <div class="result-container"><div class="result-card"><div class="result-label">Điểm tổng kết</div><div class="result-value" id="finalScore">--</div></div><div class="result-card"><div class="result-label">Xếp loại</div><div class="result-value" id="gradeLetter">--</div></div><div class="result-card"><div class="result-label">Thang điểm 4</div><div class="result-value" id="grade4">--</div></div></div>
                 <div class="reference-table"><h4>Thang điểm tham khảo</h4><table class="grade-reference"><thead><tr><th>Khoảng</th><th>Chữ</th><th>Thang 4</th></tr></thead><tbody id="gradeTableBody"></tbody></table></div>
-                <div class="ad-section"><p><i class="fas fa-code"></i> Được phát triển bởi F9 Exploit Team</p></div>
+                <div class="ad-section"><p><i class="fas fa-code"></i> Được phát triển bởi Trinh Van Tu</p></div>
             </div>
         </div>
 
@@ -364,12 +366,62 @@
                 <div class="feedback-form"><div class="form-group"><label>Họ tên (tùy chọn)</label><input type="text" id="fbName" class="form-input" placeholder="Nhập họ tên của bạn"></div><div class="form-group"><label>Email <span style="color: #ef4444;">*</span></label><input type="email" id="fbEmail" class="form-input" placeholder="your@email.com"></div><div class="form-group"><label>Loại phản hồi</label><select id="fbType" class="form-select"><option>Góp ý cải thiện</option><option>Báo lỗi hệ thống</option><option>Đề xuất tính năng</option></select></div><div class="form-group"><label>Nội dung <span style="color: #ef4444;">*</span></label><textarea id="fbContent" rows="4" class="form-textarea" placeholder="Vui lòng mô tả chi tiết..."></textarea></div><button class="btn-submit" id="sendFeedbackBtn"><i class="fas fa-paper-plane"></i> Gửi góp ý</button></div>
             </div>
         </div>
+                        <!-- Tab Chat -->
+<div id="tab-chat" class="tab-content">
+    <div class="content-card">
+        <h2 class="section-title"><i class="fas fa-comments"></i> Chat công cộng</h2>
+        
+        <!-- Thông báo trạng thái khóa tên -->
+        <div id="nameLockBanner" style="padding: 12px 16px; border-radius: 16px; margin-bottom: 20px;">
+            <!-- Nội dung sẽ được JavaScript cập nhật -->
+        </div>
+        
+        <!-- Khung chat -->
+        <div class="chat-container">
+            <div id="chatMessages" class="chat-messages">
+                <div style="text-align: center; color: #94a3b8; padding: 40px;">
+                    <i class="fas fa-spinner fa-pulse"></i> Đang tải tin nhắn...
+                </div>
+            </div>
+        </div>
+        
+        <!-- Form nhập liệu -->
+        <div id="chatInputArea" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px;">
+            <div style="flex: 2; min-width: 180px;">
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="chatName" class="form-input" placeholder="Tên hiển thị" maxlength="30" style="flex: 2;">
+                    <button id="randomNameBtn" class="btn-reset" style="margin: 0; padding: 0 12px; background: #667eea;" title="Đổi tên ngẫu nhiên">
+                        <i class="fas fa-dice"></i>
+                    </button>
+                </div>
+                <div id="nameLockStatus" style="font-size: 11px; margin-top: 5px;"></div>
+            </div>
+            <div style="flex: 5; min-width: 200px;">
+                <input type="text" id="chatMessage" class="form-input" placeholder="Nhập tin nhắn..." maxlength="500" onkeypress="if(event.key === 'Enter') sendChatMessage()">
+            </div>
+            <div>
+                <button class="btn-submit" id="sendChatBtn">
+                    <i class="fas fa-paper-plane"></i> Gửi
+                </button>
+            </div>
+        </div>
+        
+        <!-- Footer chat -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; flex-wrap: wrap; gap: 10px;">
+            <div class="chat-online-status">
+                <span class="online-dot"></span>
+                <span id="onlineStatus">Đã kết nối</span>
+                <span id="messageCount" style="margin-left: 10px;"></span>
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- TAB VỀ CHÚNG TÔI -->
         <div id="tab-vechungtoi" class="tab-content">
             <div class="content-card">
                 <h2 class="section-title"><i class="fas fa-building"></i> Về chúng tôi</h2>
-                <div class="about-content"><div class="about-logo"><i class="fas fa-graduation-cap"></i> Hỗ Trợ Học Tập</div><p>Hệ thống tính điểm và hỗ trợ học tập dành cho sinh viên Việt Nam.</p><p>Với sứ mệnh giúp sinh viên dễ dàng theo dõi kết quả học tập, dự báo điểm và tối ưu lộ trình học.</p><div class="team-info"><h4>📞 Liên hệ với chúng tôi</h4><a href="mailto:trinhvantu1210@gmail.com" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fas fa-envelope"></i></span><span><strong>Email:</strong> trinhvantu1210@gmail.com</span></div></a><a href="https://zalo.me/0374145003" target="_blank" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fab fa-snapchat"></i></span><span><strong>Zalo:</strong> 0374.145.003</span></div></a><a href="tel:0769100185" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fas fa-phone"></i></span><span><strong>Điện thoại:</strong> 0769.100.185</span></div></a></div><div class="dev-info"><p><i class="fas fa-code"></i> Phát triển bởi <strong>F9 Team</strong></p><p>© 2026 Hỗ Trợ Học Tập - All rights reserved</p></div></div>
+                <div class="about-content"><div class="about-logo"><i class="fas fa-graduation-cap"></i> Hỗ Trợ Học Tập</div><p>Hệ thống tính điểm và hỗ trợ học tập dành cho sinh viên Việt Nam.</p><p>Với sứ mệnh giúp sinh viên dễ dàng theo dõi kết quả học tập, dự báo điểm và tối ưu lộ trình học.</p><div class="team-info"><h4>📞 Liên hệ với chúng tôi</h4><a href="mailto:trinhvantu1210@gmail.com" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fas fa-envelope"></i></span><span><strong>Email:</strong> trinhvantu1210@gmail.com</span></div></a><a href="https://zalo.me/0374145003" target="_blank" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fab fa-snapchat"></i></span><span><strong>Zalo:</strong> 0374.145.003</span></div></a><a href="tel:0769100185" class="contact-link"><div class="contact-item"><span class="contact-icon"><i class="fas fa-phone"></i></span><span><strong>Điện thoại:</strong> 0769.100.185</span></div></a></div><div class="dev-info"><p><i class="fas fa-code"></i> Phát triển bởi <strong>Trịnh Văn Tú</strong></p><p>© 2026 Hỗ Trợ Học Tập - All rights reserved</p></div></div>
             </div>
         </div>
 
@@ -421,7 +473,7 @@
             </div>
             <div class="welcome-feature">
                 <i class="fas fa-university"></i>
-                <span>Dự đoán đỗ Đại học</span>
+                <span>Tính Điểm Xét Tuyển</span>
             </div>
             <div class="welcome-feature">
                 <i class="fas fa-moon"></i>
@@ -442,6 +494,7 @@
     </div>
 </div>
 <script src="data.js"></script>
+<script src="chat-data.js"></script>
 <script src="script.js"></script>
 
 </body>

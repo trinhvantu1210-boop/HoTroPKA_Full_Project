@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>404 - Không tìm thấy trang</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -12,24 +18,281 @@
             justify-content: center;
             align-items: center;
             margin: 0;
+            position: relative;
+            overflow: hidden;
         }
+        
+        /* Background animation */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
         .error-container {
             text-align: center;
             background: white;
             padding: 50px;
             border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.5s ease;
+            max-width: 500px;
+            width: 90%;
         }
-        h1 { font-size: 80px; margin: 0; color: #667eea; }
-        p { color: #64748b; margin: 20px 0; }
-        a { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 30px; border-radius: 40px; text-decoration: none; display: inline-block; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 { 
+            font-size: 100px; 
+            margin: 0; 
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        
+        p { 
+            color: #64748b; 
+            margin: 20px 0;
+            font-size: 16px;
+        }
+        
+        a { 
+            background: linear-gradient(135deg, #667eea, #764ba2); 
+            color: white; 
+            padding: 12px 30px; 
+            border-radius: 40px; 
+            text-decoration: none; 
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Watermark bản quyền */
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            font-size: 11px;
+            color: rgba(0,0,0,0.1);
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        /* Anti-crack message (ẩn nhưng vẫn hiển thị nếu ai đó inspect) */
+        .anti-crack {
+            display: none;
+        }
+        
+        /* Alert message khi bị phát hiện */
+        .crack-alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .crack-alert h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .crack-alert p {
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+        
+        .crack-alert button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <div class="error-container">
         <h1>404</h1>
-        <p>⚠️ Error Loading!</p>
+        <p>⚠️ Không tìm thấy trang bạn yêu cầu!</p>
         <a href="/">← Về trang chủ</a>
     </div>
+    <div class="watermark">Trinh Van Tu</div>
+    <div class="anti-crack">=== PROTECTED BY Trinh Van Tu ===</div>
+    
+    <div id="crackAlert" class="crack-alert">
+        <h2>🚫 TRUY CẬP BỊ TỪ CHỐI</h2>
+        <p>⚠️ Hành vi của bạn đã bị ghi nhận!<br>Trang này được bảo vệ bởi Trinh Van Tu.</p>
+        <button onclick="location.reload()">Thử lại</button>
+    </div>
+
+    <script>
+        // ==================== PROTECT 404 PAGE ====================
+        
+        // 1. Chống click chuột phải
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            showCrackAlert();
+            return false;
+        });
+        
+        // 2. Chống F12, Ctrl+Shift+I, Ctrl+U, Ctrl+Shift+J, Ctrl+Shift+C
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.key === 'u') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+                e.key === 'Insert') {
+                e.preventDefault();
+                showCrackAlert();
+                return false;
+            }
+        });
+        
+        // 3. Chống inspect bằng cách kiểm tra devtools mở
+        let devtoolsOpen = false;
+        const checkDevTools = () => {
+            const threshold = 160;
+            const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+            const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+            
+            if ((widthThreshold || heightThreshold) && !devtoolsOpen) {
+                devtoolsOpen = true;
+                showCrackAlert();
+            } else if (!widthThreshold && !heightThreshold && devtoolsOpen) {
+                devtoolsOpen = false;
+            }
+        };
+        
+        setInterval(checkDevTools, 1000);
+        
+        // 4. Chống chọn văn bản
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        
+        // 5. Chống copy
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            e.clipboardData.setData('text/plain', '⚠️ Nội dung được bảo vệ bởi Trinh Van Tu!');
+            alert('⚠️ Nội dung được bảo vệ!');
+        });
+        
+        // 6. Chống xem source code bằng cách ngăn chặn các phương thức
+        (function() {
+            // Chống view source bằng cách ghi đè console.log
+            const originalLog = console.log;
+            console.log = function() {
+                if (arguments[0] === 'source') {
+                    showCrackAlert();
+                    return;
+                }
+                originalLog.apply(console, arguments);
+            };
+            
+            // Chống debugger
+            const originalDebugger = window.debugger;
+            Object.defineProperty(window, 'debugger', {
+                get: function() { showCrackAlert(); return null; }
+            });
+        })();
+        
+        // 7. Xóa lịch sử console để tránh bị đọc thông tin
+        console.clear();
+        
+        // 8. Tạo alert ngẫu nhiên khi có hành vi đáng ngờ
+        let suspiciousCount = 0;
+        function showCrackAlert() {
+            suspiciousCount++;
+            if (suspiciousCount >= 2) {
+                const alertDiv = document.getElementById('crackAlert');
+                if (alertDiv) {
+                    alertDiv.style.display = 'flex';
+                    // Gửi thông báo về webhook (tùy chọn)
+                    const webhookURL = "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_TOKEN";
+                    fetch(webhookURL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            content: `⚠️ **CẢNH BÁO CRACK** ⚠️\nNgười dùng đã cố gắng truy cập trái phép vào trang 404!\nIP: Không xác định\nThời gian: ${new Date().toLocaleString('vi-VN')}`
+                        })
+                    }).catch(() => {});
+                }
+            }
+        }
+        
+        // 9. Chặn tất cả các phím tắt của trình duyệt
+        window.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.altKey || e.metaKey) {
+                e.preventDefault();
+                showCrackAlert();
+            }
+        });
+        
+        // 10. Chống khi F5 refresh liên tục
+        let refreshCount = 0;
+        window.addEventListener('beforeunload', function() {
+            refreshCount++;
+            if (refreshCount > 5) {
+                localStorage.setItem('blocked', 'true');
+            }
+        });
+        
+        // Nếu bị chặn thì không cho vào
+        if (localStorage.getItem('blocked') === 'true') {
+            document.body.innerHTML = `
+                <div style="height:100vh;display:flex;justify-content:center;align-items:center;background:#0f172a;color:white;text-align:center;flex-direction:column;">
+                    <h1>🚫 TRUY CẬP BỊ KHÓA</h1>
+                    <p>Bạn đã có hành vi không phù hợp. Vui lòng liên hệ quản trị viên!</p>
+                    <button onclick="localStorage.clear();location.reload()" style="margin-top:20px;padding:10px 20px;background:#ef4444;color:white;border:none;border-radius:10px;cursor:pointer;">Mở khóa</button>
+                </div>
+            `;
+        }
+        
+        console.log('%c⚠️ DỪNG LẠI! ⚠️', 'color: red; font-size: 20px; font-weight: bold;');
+        console.log('%cHành vi này có thể bị coi là vi phạm bảo mật của website!', 'color: orange; font-size: 14px;');
+        console.log('%cMọi hành động của bạn đều được ghi nhận.', 'color: yellow; font-size: 12px;');
+    </script>
 </body>
 </html>
