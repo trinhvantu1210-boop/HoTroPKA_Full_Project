@@ -354,11 +354,11 @@ function initHocBong() {
         }
     });
 }
-
 // ==================== DỰ ĐOÁN ĐẠI HỌC - TỰ ĐỘNG TÍNH TỈ LỆ ====================
 function initDuDoan() {
     const regionSelect = document.getElementById('filterRegion');
     const uniSelect = document.getElementById('filterUniversity');
+    const comboSelect = document.getElementById('filterCombo');
     const scoreInput = document.getElementById('userScore');
     const yearSelect = document.getElementById('admissionYear');
     const typeSelect = document.getElementById('admissionType');
@@ -368,20 +368,17 @@ function initDuDoan() {
     
     const db = window.universityDatabase || {};
     
-    // Chuyển đổi điểm
-    function convertScore(score, fromType, toType = 'THPT') {
+    console.log('Database có', Object.keys(db).length, 'trường');
+    
+    function convertScore(score, fromType) {
         if (fromType === 'THPT') return score;
         if (fromType === 'HSA') return (score / 150) * 30;
         if (fromType === 'TSA') return (score / 100) * 30;
         return score;
     }
     
-    // Tính tỉ lệ phần trăm đỗ dựa trên chênh lệch điểm và độ nhạy
     function calculateRate(diff, sensitivity) {
-        // Công thức tính tỉ lệ dựa trên chênh lệch
-        // diff = điểm của bạn - điểm chuẩn
-        let rate = 50; // mặc định 50%
-        
+        let rate = 50;
         if (sensitivity === 'strict') {
             if (diff >= 2) rate = 95;
             else if (diff >= 1.5) rate = 85;
@@ -400,7 +397,7 @@ function initDuDoan() {
             else if (diff >= -1) rate = 25;
             else if (diff >= -1.5) rate = 15;
             else rate = 8;
-        } else { // loose
+        } else {
             if (diff >= 1) rate = 95;
             else if (diff >= 0.5) rate = 85;
             else if (diff >= 0) rate = 70;
@@ -410,52 +407,41 @@ function initDuDoan() {
             else if (diff >= -2) rate = 15;
             else rate = 8;
         }
-        
-        // Giới hạn trong khoảng 0-100
         return Math.min(100, Math.max(0, rate));
     }
     
-    // Lấy class và message theo tỉ lệ
     function getRateInfo(rate) {
-        if (rate >= 85) return { class: 'very-high', status: '🎉 Cơ hội rất cao!', message: 'Chúc mừng! Với điểm số này, bạn gần như chắc chắn đỗ. Hãy tự tin đăng ký nguyện vọng 1 nhé!' };
+        if (rate >= 85) return { class: 'very-high', status: '🎉 Cơ hội rất cao!', message: 'Chúc mừng! Với điểm số này, bạn gần như chắc chắn đỗ!' };
         if (rate >= 70) return { class: 'high', status: '✅ Cơ hội cao', message: 'Cơ hội đỗ rất khả quan. Bạn nên đặt nguyện vọng này ở vị trí ưu tiên.' };
-        if (rate >= 50) return { class: 'medium', status: '⚠️ Cơ hội trung bình', message: 'Cơ hội 50-50. Nên có thêm phương án dự phòng và cân nhắc kỹ khi đặt nguyện vọng.' };
-        if (rate >= 30) return { class: 'low', status: '😟 Cơ hội thấp', message: 'Khả năng đỗ không cao. Bạn có thể thử nhưng nên có nguyện vọng an toàn khác.' };
-        return { class: 'very-low', status: '❌ Cơ hội rất thấp', message: 'Rất khó để đỗ ngành này với điểm số hiện tại. Hãy chọn ngành có điểm chuẩn thấp hơn hoặc cố gắng cải thiện điểm số.' };
+        if (rate >= 50) return { class: 'medium', status: '⚠️ Cơ hội trung bình', message: 'Cơ hội 50-50. Nên có thêm phương án dự phòng.' };
+        if (rate >= 30) return { class: 'low', status: '😟 Cơ hội thấp', message: 'Khả năng đỗ không cao. Nên có nguyện vọng an toàn khác.' };
+        return { class: 'very-low', status: '❌ Cơ hội rất thấp', message: 'Rất khó để đỗ ngành này với điểm số hiện tại.' };
     }
     
-    // Dự đoán chính
     function predict() {
         const rawScore = parseFloat(scoreInput.value);
         const uniCode = uniSelect.value;
+        const selectedCombo = comboSelect?.value || 'all';
         const year = yearSelect.value;
         const admissionType = typeSelect.value;
         const sensitivity = sensitivitySelect.value;
         
-        // Hiển thị điểm trên header
+        console.log('Dự đoán:', { rawScore, uniCode, selectedCombo, year, admissionType });
+        
         if (!isNaN(rawScore) && rawScore > 0) {
             const convertedScore = convertScore(rawScore, admissionType);
-            scoreDisplayHeader.innerHTML = `<i class="fas fa-star"></i> Điểm của bạn: <strong>${rawScore}</strong> (${admissionType === 'THPT' ? 'thang 30' : admissionType === 'HSA' ? 'thang 150' : 'thang 100'}) → Quy đổi: <strong>${convertedScore.toFixed(2)}</strong>/30`;
+            scoreDisplayHeader.innerHTML = `<i class="fas fa-star"></i> Điểm của bạn: <strong>${rawScore}</strong> → Quy đổi: <strong>${convertedScore.toFixed(2)}</strong>/30`;
         } else {
             scoreDisplayHeader.innerHTML = `<i class="fas fa-star"></i> Chưa nhập điểm`;
         }
         
-        // Kiểm tra điều kiện
         if (uniCode === 'all' || uniCode === null) {
-            predictionList.innerHTML = `
-                <div style="text-align: center; padding: 40px; color: #94a3b8;">
-                    <i class="fas fa-university" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
-                    Vui lòng chọn một trường đại học để xem dự đoán chi tiết
-                </div>`;
+            predictionList.innerHTML = `<div style="text-align: center; padding: 40px;"><i class="fas fa-university" style="font-size: 48px;"></i><br>Vui lòng chọn một trường đại học!</div>`;
             return;
         }
         
         if (isNaN(rawScore) || rawScore <= 0) {
-            predictionList.innerHTML = `
-                <div style="text-align: center; padding: 40px; color: #94a3b8;">
-                    <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
-                    Vui lòng nhập điểm thi của bạn để xem tỉ lệ đỗ
-                </div>`;
+            predictionList.innerHTML = `<div style="text-align: center; padding: 40px;"><i class="fas fa-chart-line" style="font-size: 48px;"></i><br>Vui lòng nhập điểm thi của bạn!</div>`;
             return;
         }
         
@@ -463,25 +449,40 @@ function initDuDoan() {
         const university = db[uniCode];
         
         if (!university) {
-            predictionList.innerHTML = `<div style="text-align: center; padding: 40px;">Không tìm thấy thông tin trường</div>`;
+            predictionList.innerHTML = `<div style="text-align: center; padding: 40px;">Không tìm thấy thông tin trường "${uniCode}"</div>`;
             return;
         }
         
-        // Lấy tất cả ngành của trường
-        const subjects = Object.entries(university.subjects);
+        // Lọc ngành theo combo
+        let subjects = Object.entries(university.subjects);
+        console.log('Tổng số ngành:', subjects.length);
+        
+        if (selectedCombo !== 'all') {
+            subjects = subjects.filter(([code, subject]) => {
+                // Nếu subject.combo là chuỗi có dấu ";", tách ra để kiểm tra
+                const combos = subject.combo ? subject.combo.split(';') : [];
+                return combos.includes(selectedCombo);
+            });
+            console.log('Sau khi lọc combo', selectedCombo, ':', subjects.length);
+        }
         
         if (subjects.length === 0) {
-            predictionList.innerHTML = `<div style="text-align: center; padding: 40px;">Trường này chưa có dữ liệu ngành học</div>`;
+            predictionList.innerHTML = `<div style="text-align: center; padding: 40px; color: #ef4444;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px;"></i><br>
+                Không có ngành nào phù hợp với tổ hợp <strong>${selectedCombo}</strong> tại trường <strong>${university.name}</strong>
+            </div>`;
             return;
         }
         
-        // Tính toán cho từng ngành
         let results = subjects.map(([code, subject]) => {
-            const standardScore = subject.target;
+            const year = yearSelect.value;
+            let standardScore = subject.target2025;
+            if (year === '2024') standardScore = subject.target2024;
+            if (year === '2023') standardScore = subject.target2023;
+            if (!standardScore) standardScore = subject.target2025; // fallback
             const diff = userScore - standardScore;
             const rate = calculateRate(diff, sensitivity);
             const rateInfo = getRateInfo(rate);
-            
             return {
                 code: code,
                 name: subject.name,
@@ -497,106 +498,61 @@ function initDuDoan() {
             };
         });
         
-        // Sắp xếp theo tỉ lệ đỗ giảm dần
         results.sort((a, b) => b.rate - a.rate);
         
-        // Hiển thị kết quả
         predictionList.innerHTML = results.map(r => {
-            // Màu cho biểu đồ tròn
             const color = r.rate >= 85 ? '#10b981' : r.rate >= 70 ? '#3b82f6' : r.rate >= 50 ? '#f59e0b' : r.rate >= 30 ? '#ef4444' : '#6b7280';
-            
             return `
-                <div class="prediction-item ${r.rateClass}">
-                    <div class="prediction-header">
-                        <div class="prediction-subject-name">
-                            📚 ${r.name}
-                            <span class="prediction-combo">${r.combo}</span>
+                <div class="prediction-item" style="border-left: 4px solid ${color}; margin-bottom: 15px; padding: 15px; background: white; border-radius: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                        <div>
+                            <strong>📚 ${r.name}</strong>
+                            <span style="font-size: 12px; background: #e2e8f0; padding: 2px 8px; border-radius: 20px; margin-left: 8px;">${r.combo}</span>
                         </div>
-                        <div class="prediction-rate">
-                            <div class="rate-circle" style="--percent: ${r.rate * 3.6}deg; --color: ${color}">
-                                <div class="rate-value">${Math.round(r.rate)}%</div>
-                            </div>
-                            <div class="rate-label">Tỉ lệ đỗ</div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 24px; font-weight: 800; color: ${color};">${Math.round(r.rate)}%</div>
+                            <div style="font-size: 11px;">Tỉ lệ đỗ</div>
                         </div>
                     </div>
-                    
-                    <div class="prediction-scores">
-                        <div class="score-item">
-                            <div class="score-label">Điểm của bạn</div>
-                            <div class="score-value your">${r.userScore.toFixed(2)}</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">Điểm chuẩn ${r.year}</div>
-                            <div class="score-value standard">${r.standardScore.toFixed(2)}</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">Chênh lệch</div>
-                            <div class="diff-value ${r.diff >= 0 ? 'diff-positive' : 'diff-negative'}">
-                                ${r.diff >= 0 ? '+' : ''}${r.diff.toFixed(2)}
-                            </div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">Đánh giá</div>
-                            <div class="diff-value" style="color: ${r.rate >= 70 ? '#10b981' : r.rate >= 50 ? '#f59e0b' : '#ef4444'}">
-                                ${r.rateStatus}
-                            </div>
-                        </div>
+                    <div style="display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap;">
+                        <div><span style="color: #64748b;">Điểm của bạn:</span> <strong>${r.userScore.toFixed(2)}</strong></div>
+                        <div><span style="color: #64748b;">Điểm chuẩn ${r.year}:</span> <strong>${r.standardScore.toFixed(2)}</strong></div>
+                        <div><span style="color: ${r.diff >= 0 ? '#10b981' : '#ef4444'};">Chênh: ${r.diff >= 0 ? '+' : ''}${r.diff.toFixed(2)}</span></div>
                     </div>
-                    
-                    <div class="prediction-message">
-                        💬 ${r.message}
-                    </div>
-                    
-                    <div class="prediction-note">
-                        <i class="fas fa-chart-line"></i> Dựa trên điểm chuẩn năm ${r.year} | Độ tin cậy: ${Math.round(r.rate)}%
-                    </div>
+                    <div style="margin-top: 10px; font-size: 13px; color: #475569;">💬 ${r.message}</div>
                 </div>
             `;
         }).join('');
         
-        // Cuộn đến kết quả
         document.getElementById('predictionResult').scrollIntoView({ behavior: 'smooth' });
     }
     
-    // Đổ danh sách trường
     function loadUniversities() {
         const region = regionSelect.value;
         let universities = {};
-        
         for (const [code, data] of Object.entries(db)) {
             if (region === 'all' || data.region === region) {
                 universities[code] = data;
             }
         }
-        
         uniSelect.innerHTML = '<option value="all">-- Chọn trường --</option>';
         for (const [code, data] of Object.entries(universities)) {
             const option = document.createElement('option');
             option.value = code;
-            option.textContent = `${data.name} (${data.location}) - ${Object.keys(data.subjects).length} ngành`;
+            option.textContent = `${data.name} (${data.location})`;
             uniSelect.appendChild(option);
         }
-        
-        // Reset kết quả
-        predictionList.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: #94a3b8;">
-                <i class="fas fa-university" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
-                Vui lòng chọn trường và nhập điểm để xem dự đoán
-            </div>`;
+        predictionList.innerHTML = `<div style="text-align: center; padding: 40px;">Vui lòng chọn trường và nhập điểm</div>`;
     }
     
-    // Gán sự kiện - TỰ ĐỘNG TÍNH KHI THAY ĐỔI BẤT KỲ
-    regionSelect?.addEventListener('change', () => {
-        loadUniversities();
-        predict();
-    });
+    regionSelect?.addEventListener('change', () => { loadUniversities(); predict(); });
     uniSelect?.addEventListener('change', predict);
+    comboSelect?.addEventListener('change', predict);
     scoreInput?.addEventListener('input', predict);
     yearSelect?.addEventListener('change', predict);
     typeSelect?.addEventListener('change', predict);
     sensitivitySelect?.addEventListener('change', predict);
     
-    // Khởi tạo
     loadUniversities();
 }
 

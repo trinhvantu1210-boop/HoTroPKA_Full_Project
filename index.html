@@ -180,26 +180,194 @@
         <div class="info-box"><i class="fas fa-bolt"></i> Nhập điểm thi của bạn → Hệ thống sẽ tự động tính tỉ lệ đỗ cho từng ngành</div>
         
         <div class="form-row">
-            <div class="form-group">
-                <label class="form-label"><i class="fas fa-university"></i> Chọn khu vực</label>
-                <select id="filterRegion" class="form-select">
-                    <option value="all">Tất cả</option>
-                    <option value="mb">Miền Bắc</option>
-                    <option value="mt">Miền Trung</option>
-                    <option value="mn">Miền Nam</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label"><i class="fas fa-search"></i> Chọn trường đại học</label>
-                <select id="filterUniversity" class="form-select">
-                    <option value="all">-- Chọn trường --</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label"><i class="fas fa-chart-simple"></i> Điểm thi của bạn (thang 30)</label>
-                <input type="number" id="userScore" step="0.1" class="form-input" placeholder="VD: 28.5" value="">
-            </div>
-        </div>
+    <div class="form-group">
+        <label class="form-label"><i class="fas fa-university"></i> Chọn khu vực</label>
+        <select id="filterRegion" class="form-select">
+            <option value="all">Tất cả</option>
+            <option value="mb">Miền Bắc</option>
+            <option value="mt">Miền Trung</option>
+            <option value="mn">Miền Nam</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="form-label"><i class="fas fa-search"></i> Chọn trường đại học</label>
+        <select id="filterUniversity" class="form-select">
+            <option value="all">-- Chọn trường --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="form-label"><i class="fas fa-chart-simple"></i> Điểm thi của bạn (thang 30)</label>
+        <input type="number" id="userScore" step="0.1" class="form-input" placeholder="VD: 28.5" value="">
+    </div>
+</div>
+
+<!-- 👇 THÊM DÒNG NÀY (CHỌN TỔ HỢP MÔN) 👇 -->
+<div class="form-row">
+    <div class="form-group">
+    <label class="form-label">
+        <i class="fas fa-layer-group"></i> Chọn tổ hợp môn
+    </label>
+
+    <select id="filterCombo" class="form-select">
+        <option value="all">-- Tất cả tổ hợp --</option>
+
+        <!-- KHỐI A -->
+        <option value="A00">A00 (Toán - Lý - Hóa)</option>
+        <option value="A01">A01 (Toán - Lý - Anh)</option>
+        <option value="A02">A02 (Toán - Lý - Sinh)</option>
+        <option value="A03">A03 (Toán - Lý - Sử)</option>
+        <option value="A04">A04 (Toán - Lý - Địa)</option>
+        <option value="A05">A05 (Toán - Hóa - Sử)</option>
+        <option value="A06">A06 (Toán - Hóa - Địa)</option>
+        <option value="A07">A07 (Toán - Sử - Địa)</option>
+        <option value="A08">A08 (Toán - Sử - GDCD)</option>
+        <option value="A09">A09 (Toán - Địa - GDCD)</option>
+        <option value="A10">A10 (Toán - Lý - GDCD)</option>
+        <option value="A11">A11 (Toán - Hóa - GDCD)</option>
+        <option value="A12">A12 (Toán - KHTN - KHXH)</option>
+        <option value="A14">A14 (Toán - KHTN - Địa)</option>
+        <option value="A15">A15 (Toán - KHXH - Anh)</option>
+        <option value="A16">A16 (Toán - Văn - KHTN)</option>
+        <option value="A17">A17 (Toán - Lý - KHXH)</option>
+        <option value="A18">A18 (Toán - Hóa - KHXH)</option>
+
+        <!-- KHỐI B -->
+        <option value="B00">B00 (Toán - Hóa - Sinh)</option>
+        <option value="B01">B01 (Toán - Sinh - Sử)</option>
+        <option value="B02">B02 (Toán - Sinh - Địa)</option>
+        <option value="B03">B03 (Toán - Sinh - Văn)</option>
+        <option value="B04">B04 (Toán - Sinh - GDCD)</option>
+        <option value="B05">B05 (Toán - Sinh - KHTN)</option>
+        <option value="B08">B08 (Toán - Sinh - Anh)</option>
+
+        <!-- KHỐI C -->
+        <option value="C00">C00 (Văn - Sử - Địa)</option>
+        <option value="C01">C01 (Văn - Toán - Lý)</option>
+        <option value="C02">C02 (Văn - Toán - Hóa)</option>
+        <option value="C03">C03 (Văn - Toán - Sử)</option>
+        <option value="C04">C04 (Văn - Toán - Địa)</option>
+        <option value="C05">C05 (Văn - Lý - Hóa)</option>
+        <option value="C06">C06 (Văn - Lý - Sinh)</option>
+        <option value="C07">C07 (Văn - Lý - Sử)</option>
+        <option value="C08">C08 (Văn - Hóa - Sinh)</option>
+        <option value="C09">C09 (Văn - Lý - Địa)</option>
+        <option value="C10">C10 (Văn - Hóa - Sử)</option>
+        <option value="C12">C12 (Văn - Sinh - Sử)</option>
+        <option value="C13">C13 (Văn - Sinh - Địa)</option>
+        <option value="C14">C14 (Toán - Văn - GDCD)</option>
+        <option value="C15">C15 (Văn - Toán - KHXH)</option>
+        <option value="C16">C16 (Văn - Lý - GDCD)</option>
+        <option value="C17">C17 (Văn - Hóa - GDCD)</option>
+        <option value="C19">C19 (Văn - Sử - GDCD)</option>
+        <option value="C20">C20 (Văn - Địa - GDCD)</option>
+
+        <!-- KHỐI D -->
+        <option value="D01">D01 (Toán - Văn - Anh)</option>
+        <option value="D02">D02 (Toán - Văn - Nga)</option>
+        <option value="D03">D03 (Toán - Văn - Pháp)</option>
+        <option value="D04">D04 (Toán - Văn - Trung)</option>
+        <option value="D05">D05 (Toán - Văn - Đức)</option>
+        <option value="D06">D06 (Toán - Văn - Nhật)</option>
+        <option value="D07">D07 (Toán - Hóa - Anh)</option>
+        <option value="D08">D08 (Toán - Sinh - Anh)</option>
+        <option value="D09">D09 (Toán - Sử - Anh)</option>
+        <option value="D10">D10 (Toán - Địa - Anh)</option>
+        <option value="D11">D11 (Văn - Lý - Anh)</option>
+        <option value="D12">D12 (Văn - Hóa - Anh)</option>
+        <option value="D13">D13 (Văn - Sinh - Anh)</option>
+        <option value="D14">D14 (Văn - Sử - Anh)</option>
+        <option value="D15">D15 (Văn - Địa - Anh)</option>
+        <option value="D16">D16 (Toán - Địa - Đức)</option>
+        <option value="D17">D17 (Toán - Địa - Nga)</option>
+        <option value="D18">D18 (Toán - Địa - Nhật)</option>
+        <option value="D19">D19 (Toán - Địa - Pháp)</option>
+        <option value="D20">D20 (Toán - Địa - Trung)</option>
+        <option value="D21">D21 (Toán - Hóa - Đức)</option>
+        <option value="D22">D22 (Toán - Hóa - Nga)</option>
+        <option value="D23">D23 (Toán - Hóa - Nhật)</option>
+        <option value="D24">D24 (Toán - Hóa - Pháp)</option>
+        <option value="D25">D25 (Toán - Hóa - Trung)</option>
+        <option value="D26">D26 (Toán - Lý - Đức)</option>
+        <option value="D27">D27 (Toán - Lý - Nga)</option>
+        <option value="D28">D28 (Toán - Lý - Nhật)</option>
+        <option value="D29">D29 (Toán - Lý - Pháp)</option>
+        <option value="D30">D30 (Toán - Lý - Trung)</option>
+        <option value="D31">D31 (Toán - Sinh - Đức)</option>
+        <option value="D32">D32 (Toán - Sinh - Nga)</option>
+        <option value="D33">D33 (Toán - Sinh - Nhật)</option>
+        <option value="D34">D34 (Toán - Sinh - Pháp)</option>
+        <option value="D35">D35 (Toán - Sinh - Trung)</option>
+        <option value="D66">D66 (Văn - GDCD - Anh)</option>
+        <option value="D68">D68 (Văn - GDCD - Đức)</option>
+        <option value="D69">D69 (Văn - GDCD - Nhật)</option>
+        <option value="D70">D70 (Văn - GDCD - Nga)</option>
+        <option value="D72">D72 (Văn - KHXH - Anh)</option>
+        <option value="D78">D78 (Văn - KHXH - Anh)</option>
+        <option value="D84">D84 (Toán - GDCD - Anh)</option>
+        <option value="D90">D90 (Toán - KHTN - Anh)</option>
+        <option value="D96">D96 (Toán - KHXH - Anh)</option>
+
+        <!-- KHỐI H -->
+        <option value="H00">H00 (Văn - Vẽ Hình Họa - Vẽ Trang Trí)</option>
+        <option value="H01">H01 (Toán - Văn - Vẽ)</option>
+        <option value="H02">H02 (Toán - Vẽ Hình Họa - Vẽ Trang Trí)</option>
+        <option value="H03">H03 (Toán - KHTN - Vẽ)</option>
+
+        <!-- KHỐI M -->
+        <option value="M00">M00 (Văn - Toán - Đọc Diễn Cảm)</option>
+        <option value="M01">M01 (Văn - Sử - Năng Khiếu)</option>
+        <option value="M02">M02 (Toán - Năng Khiếu 1 - Năng Khiếu 2)</option>
+
+        <!-- KHỐI N -->
+        <option value="N00">N00 (Văn - Năng Khiếu Âm Nhạc 1 - NK Âm Nhạc 2)</option>
+
+        <!-- KHỐI R -->
+        <option value="R00">R00 (Văn - Sử - Năng Khiếu Báo Chí)</option>
+
+        <!-- KHỐI S -->
+        <option value="S00">S00 (Văn - Năng Khiếu SKDA 1 - Năng Khiếu SKDA 2)</option>
+
+        <!-- KHỐI T -->
+        <option value="T00">T00 (Toán - Sinh - Năng Khiếu TDTT)</option>
+        <option value="T01">T01 (Toán - Văn - Năng Khiếu TDTT)</option>
+
+        <!-- KHỐI V -->
+        <option value="V00">V00 (Toán - Lý - Vẽ)</option>
+        <option value="V01">V01 (Toán - Văn - Vẽ)</option>
+
+        <!-- KHỐI X -->
+        <option value="X01">X01 (Toán - Văn - GDKTPL)</option>
+        <option value="X02">X02 (Toán - Văn - Tin Học)</option>
+    </select>
+</div>
+    <div class="form-group">
+        <label class="form-label"><i class="fas fa-calendar"></i> Năm tham khảo</label>
+        <select id="admissionYear" class="form-select">
+            <option value="2025">Năm 2025</option>
+            <option value="2024">Năm 2024</option>
+            <option value="2023">Năm 2023</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="form-label"><i class="fas fa-robot"></i> Phương thức xét tuyển</label>
+        <select id="admissionType" class="form-select">
+            <option value="THPT">Xét điểm THPT (thang 30)</option>
+            <option value="HSA">Xét HSA (thang 150)</option>
+            <option value="TSA">Xét TSA (thang 100)</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label class="form-label"><i class="fas fa-sliders-h"></i> Độ nhạy dự đoán</label>
+        <select id="sensitivity" class="form-select">
+            <option value="strict">🔴 Nghiêm ngặt (khó đỗ hơn)</option>
+            <option value="normal" selected="selected">🟡 Bình thường</option>
+            <option value="loose">🟢 Thoáng (dễ đỗ hơn)</option>
+        </select>
+    </div>
+</div>
         
         <div class="form-row">
             <div class="form-group">
@@ -256,6 +424,7 @@
         </div>
         </div>
         </div>
+
         <!-- TAB THAM KHẢO ĐẠI HỌC -->
         <div id="tab-daihoc" class="tab-content">
             <div class="content-card">
