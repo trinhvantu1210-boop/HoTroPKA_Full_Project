@@ -6,15 +6,14 @@ Hệ thống hỗ trợ sinh viên tính điểm học phần, quy đổi chứn
 ## 🚀 Tính năng
 - Tính điểm học phần (3 thang điểm)
 - Tính điểm qua môn
-- Tính điểm tốt nghiệp
+- Tính điểm tốt nghiệp Đại Học
 - Quy đổi chứng chỉ TOEIC/IELTS
-- Dự đoán đỗ đại học (tỉ lệ %)
+- Tính Toán Điểm Đỗ Đại Học + Đỗ Tốt Nghiệp THPT
 - Tham khảo điểm chuẩn các trường
-- Dark mode
-- Gửi góp ý qua Discord Webhook
+- Hỗ Trợ - Lắng Nghe Góp Ý 24/7 
 
 ## 👨‍💻 Tác giả
-F9 Exploit Team
+Trịnh Văn Tú 
 
 ## 📧 Bản quyền Liên Hệ 
 trinhvantu1210@gmail.com
